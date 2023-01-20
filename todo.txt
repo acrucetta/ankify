@@ -1,0 +1,23 @@
+
+
+Project Goal:
+Users will be able to create their own Anki cards based out of 
+the Open AI APIl. They will upload a PDF or a paper. It will
+get parsed and they will choose the sections they want
+to build Anki cards out of. 
+
+Later down the road you can do this with slides, readings,
+books, etc...
+
+Tech Stack
+
+Front-End
+- Rust / Yew
+
+Back-end
+- Rust (Rocket, Diesel)
+- Kubernetes / GCP
+- Docker
+
+Database
+- PostgreSQL

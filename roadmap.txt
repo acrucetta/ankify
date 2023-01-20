@@ -1,0 +1,9 @@
+
+Tasks
+- Build a basic front-end application with Pure CSS, HTML and Typescript
+- Process the front-end requests with Rust and its back-end logic
+- Create a database to store all the information
+
+Resources:
+- https://betterprogramming.pub/how-to-write-a-web-app-in-rust-part-1-3047156660a7
+- https://github.com/joselo/rust-crud - CRUD Web App
