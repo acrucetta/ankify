@@ -21,3 +21,13 @@ Back-end
 
 Database
 - PostgreSQL
+
+
+---
+
+HTTP Requests
+- post - insert task to the API
+- get - get task result after inserting the task
+- post - select card ID to download
+
+
