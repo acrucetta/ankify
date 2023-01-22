@@ -44,7 +44,7 @@ func openAIHandler(c *gin.Context) {
 		return
 	}
 
-	var API_KEY string = os.Getenv("OPENAI_API_KEY")
+	var API_KEY string = os.Getenv("OPENAI_KEY")
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Authorization", "Bearer "+API_KEY)
 
