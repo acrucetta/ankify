@@ -1,4 +1,4 @@
-package pdfParsing
+package pdfparser
 
 import (
 	"bufio"
@@ -10,19 +10,21 @@ import (
 	"github.com/unidoc/unipdf/v3/model"
 )
 
-func parse_pdf(cfg *Config) {
+func parse_pdf(pdfPath string) (string, error) {
+
 	// Initialize the library
 	err := license.SetMeteredKey(os.Getenv("PDF_PARSER_KEY"))
 	if err != nil {
 		fmt.Printf("Error: %v", err)
-		return
+		return "", err
 	}
 	// Load the PDF document
-	pdfReader, err := model.NewPdfReaderFromFile(pdfPath)
+	reader, f, err := model.NewPdfReaderFromFile(pdfPath, nil)
 	if err != nil {
 		fmt.Printf("Error: %v", err)
-		return
+		return "", err
 	}
+	defer f.Close()
 
 	// Print number of pages in the PDF.
 	numPages, _ := reader.GetNumPages()
@@ -35,23 +37,23 @@ func parse_pdf(cfg *Config) {
 	pageNum, err := strconv.Atoi(scanner.Text())
 	if err != nil {
 		fmt.Printf("Error: %v", err)
-		return
+		return "", err
 	}
 
 	// Get the page.
 	page, err := pdfReader.GetPage(pageNum)
 	if err != nil {
 		fmt.Printf("Error: %v", err)
-		return
+		return "", err
 	}
 
 	// Extract text from the page.
 	text, err := page.GetText()
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
-		return
+		return "", err
 	}
 
-	// Make an API call to OpenAI to generate a question and answer.
-
+	// Print the text.
+	fmt.Println(text)
 }
