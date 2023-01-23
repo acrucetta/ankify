@@ -10,14 +10,7 @@ import (
 	"github.com/unidoc/unipdf/v3/model"
 )
 
-func main() {
-	// Load the PDF file from the arguments.
-	if len(os.Args) < 2 {
-		fmt.Printf("Usage: go run pdf_parser.go input.pdf\n")
-		os.Exit(1)
-	}
-	pdfPath := os.Args[1]
-
+func parse_pdf(cfg *Config) {
 	// Initialize the library
 	err := license.SetMeteredKey(os.Getenv("PDF_PARSER_KEY"))
 	if err != nil {
