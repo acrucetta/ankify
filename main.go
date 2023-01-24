@@ -1,7 +1,9 @@
 package main
 
-import "cmd/stringer"
+import (
+	"cmd/parser"
+)
 
 func main() {
-	stringer.Execute()
+	parser.Execute()
 }

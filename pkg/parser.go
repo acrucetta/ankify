@@ -41,7 +41,7 @@ func parse_pdf(pdfPath string) (string, error) {
 	}
 
 	// Get the page.
-	page, err := pdfReader.GetPage(pageNum)
+	page, err := reader.GetPage(pageNum)
 	if err != nil {
 		fmt.Printf("Error: %v", err)
 		return "", err
