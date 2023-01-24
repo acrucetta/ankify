@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	"github.com/unidoc/unipdf/v3/common/license"
+	"github.com/unidoc/unipdf/v3/extractor"
 	"github.com/unidoc/unipdf/v3/model"
 )
 
@@ -48,12 +49,19 @@ func parse_pdf(pdfPath string) (string, error) {
 	}
 
 	// Extract text from the page.
-	text, err := page.GetText()
+	ex, err := extractor.New(page)
+	if err != nil {
+		fmt.Printf("Error: %v", err)
+		return "", err
+	}
+
+	text, err := ex.ExtractText()
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return "", err
 	}
-
 	// Print the text.
 	fmt.Println(text)
+
+	return text, nil
 }
