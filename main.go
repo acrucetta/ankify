@@ -1,7 +1,7 @@
 package main
 
 import (
-	"cmd/parser"
+	"github.com/acrucetta/cmd/parser"
 )
 
 func main() {
