@@ -11,7 +11,7 @@ import (
 	"github.com/unidoc/unipdf/v3/model"
 )
 
-func parse_pdf(pdfPath string) (string, error) {
+func ParsePdf(pdfPath string) (string, error) {
 
 	// Initialize the library
 	err := license.SetMeteredKey(os.Getenv("PDF_PARSER_KEY"))
