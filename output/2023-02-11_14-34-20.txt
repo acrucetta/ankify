@@ -1,0 +1,11 @@
+
+Q: What is the original version of prospect theory described in Kahneman and Tversky (1979)?; 
+A: The original version of prospect theory is described in Kahneman and Tversky (1979) and can be applied to gambles with at most two nonzero outcomes, and predicts that people will sometimes choose dominated gambles. ; 
+Q: What is cumulative prospect theory?; 
+A: Cumulative prospect theory is a modified version of prospect theory proposed by Kahneman and Tversky in 1992 which resolves the limitations of the original version. It is typically used in economic analysis and evaluates gambles in terms of a value function rather than a utility function. ; 
+Q: What is the notation used to express a gamble in cumulative prospect theory?; 
+A: The notation used to express a gamble in cumulative prospect theory is (x –m , p –m ; x –m+1, p –m+1; . . . ; x 0 , p 0 ; . . . ; xn –1, pn –1; xn , pn ), where the notation should be read as “gain x –m with probability p –m , x –m +1 with probability p –m+1, and so on,” where the outcomes are arranged in increasing order, so that xi < xj for i < j, and where x 0 = 0. ; 
+Q: How does expected utility theory evaluate a gamble?; 
+A: Expected utility theory evaluates a gamble as ∑pi U(W + xi), where W is current wealth and U(·) is an increasing and concave utility function. ; 
+Q: How does cumulative prospect theory evaluate a gamble?; 
+A: Cumulative prospect theory evaluates a gamble as ∑πi v(xi), where v(·) is a value function that captures the nonlinear transformation of gains and losses relative to a reference point.

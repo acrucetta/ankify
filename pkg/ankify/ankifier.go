@@ -36,7 +36,8 @@ const API_URL = "https://api.openai.com/v1/completions"
 const ANKI_TEXT = `Make 5 Anki cards for the following text, give it to me in the following 
 				format: Q: A: 
 
-				Divide each card with a new line and a ";" at the end of each question and answer.`
+				Divide each card with a new line and a ";" at the end of each question and answer. Add 
+				more context to each question by searching the web for the answer.`
 
 func GetAnkiCards(anki_text string) (string, error) {
 	// Create a new HTTP client
