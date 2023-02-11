@@ -1,4 +1,4 @@
-package pdfparser
+package docparser
 
 import (
 	"bufio"
@@ -12,6 +12,35 @@ import (
 
 	"github.com/joho/godotenv"
 )
+
+func ParseTxt(txt_path string) (string, error) {
+	// Load environment variables
+	err_env := godotenv.Load(".env")
+	if err_env != nil {
+		fmt.Printf("Error: %v", err_env)
+		return "", err_env
+	}
+
+	// Load the text file
+	f, err := os.Open(txt_path)
+	if err != nil {
+		fmt.Printf("Error: %v", err)
+		return "", err
+	}
+	defer f.Close()
+
+	// Read the text file
+	reader := bufio.NewReader(f)
+	var text string
+	for {
+		line, err := reader.ReadString('\n')
+		if err != nil {
+			break
+		}
+		text += line
+	}
+	return text, nil
+}
 
 func ParsePdf(pdfPath string) (string, error) {
 

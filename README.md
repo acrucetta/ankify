@@ -24,7 +24,7 @@ This command parses the PDF file `input.pdf` and outputs the text to the termina
 
 ## Example
 
-Here is an example of how to use Ankify to create flashcards from a PDF file named `test.pdf`, this pdf contains the seminal paper on MapReduce by Google.
+Here is an example of how to use Ankify to create flashcards from a PDF file named `test.pdf`, this pdf contains the seminal paper on MapReduce by Google.ac
 
 `go run main.go ankify test.pdf`
 

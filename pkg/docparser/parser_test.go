@@ -1,4 +1,4 @@
-package pdfparser
+package docparser
 
 import (
 	"testing"
