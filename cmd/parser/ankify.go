@@ -84,5 +84,5 @@ var AnkifyCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(AnkifyCmd)
 	AnkifyCmd.Flags().StringP("type", "t", "", "Type of file to parse, either 'txt' or 'pdf'")
-	AnkifyCmd.Flags().IntSliceP("pages", "p", []int{}, "Page numbers to parse")
+	AnkifyCmd.Flags().IntSliceP("pages", "p", []int{}, "Page numbers to parse, e.g., '1,2,3' (default is 1)")
 }

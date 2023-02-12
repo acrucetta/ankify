@@ -12,6 +12,19 @@ This will compile the code and create an executable file named `ankify`.
 
 ## Usage
 
+```
+Usage:
+  Anki ankify [file path] [flags]
+
+Aliases:
+  ankify, a
+
+Flags:
+  -h, --help          help for ankify
+  -p, --pages ints    Page numbers to parse, e.g., '1,2,3' (default is 1)
+  -t, --type string   Type of file to parse, either 'txt' or 'pdf'
+```
+
 Ankify can be run from the command line with the following two main commands:
 
 `go run main.go ankify input.pdf`
