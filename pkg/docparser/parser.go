@@ -4,28 +4,20 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"os/exec"
 	"strconv"
 
-	"github.com/unidoc/unipdf/v3/common/license"
-	"github.com/unidoc/unipdf/v3/extractor"
-	"github.com/unidoc/unipdf/v3/model"
-
-	"github.com/joho/godotenv"
+	"github.com/pdfcpu/pdfcpu/pkg/api"
+	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu"
 )
 
-func ParseTxt(txt_path string) (string, error) {
-	// Load environment variables
-	err_env := godotenv.Load(".env")
-	if err_env != nil {
-		fmt.Printf("Error: %v", err_env)
-		return "", err_env
-	}
+func ParseTxt(txt_path string) (map[int]string, error) {
 
 	// Load the text file
 	f, err := os.Open(txt_path)
 	if err != nil {
 		fmt.Printf("Error: %v", err)
-		return "", err
+		return nil, err
 	}
 	defer f.Close()
 
@@ -39,75 +31,69 @@ func ParseTxt(txt_path string) (string, error) {
 		}
 		text += line
 	}
-	return text, nil
+	res := make(map[int]string)
+	res[1] = text
+
+	return res, nil
 }
 
-func ParsePdf(pdf_path string) (string, error) {
-
-	// Load environment variables
-	err_env := godotenv.Load(".env")
-	if err_env != nil {
-		fmt.Printf("Error: %v", err_env)
-		return "", err_env
+func GetMaxPages(pdf_path string) (int, error) {
+	// Read the PDF file
+	config := pdfcpu.NewDefaultConfiguration()
+	err := api.ExtractMetadataFile(pdf_path, "output", config)
+	if err != nil {
+		fmt.Printf("Error: %v", err)
+		return 0, err
 	}
+	return 0, nil
+}
 
-	// Initialize the library
-	err := license.SetMeteredKey(os.Getenv("PDF_PARSER_KEY"))
+// This function is used to parse a PDF file and return the text on a specific page.
+func ParsePdfPage(pdf_path string, page_number int) (string, error) {
+
+	// Print current path
+	dir, _ := os.Getwd()
+	fmt.Println(dir)
+
+	// Call pdf2text.py to parse the PDF file on the given page
+	command := "pipenv run pdf2txt.py -p " + strconv.Itoa(page_number) + " " + pdf_path
+	cmd := exec.Command("bash", "-c", command)
+
+	// Run the command
+	out, err := cmd.Output()
+
+	// Check for errors
 	if err != nil {
 		fmt.Printf("Error: %v", err)
 		return "", err
 	}
-	// Load the PDF document
-	reader, f, err := model.NewPdfReaderFromFile(pdf_path, nil)
-	if err != nil {
-		fmt.Printf("Error: %v", err)
-		return "", err
-	}
-	defer f.Close()
+	return string(out), nil
+}
 
-	// Print number of pages in the PDF.
-	numPages, _ := reader.GetNumPages()
-	fmt.Printf("Number of pages in the PDF: %d\n", numPages)
+// This function is used to parse a PDF file and return the text on a specific page.
+// We are using pdf2text.py to parse the PDF file. We will call it from the command line.
+// The function returns the text on the page as a string.
+func ParsePdf(pdf_path string, pages []int) (map[int]string, error) {
 
-	// Ask the user for a page number.
-	fmt.Printf("Enter a page number (1-%d): ", numPages)
-	user_input := bufio.NewReader(os.Stdin)
-	var pageNum string
-	pageNum, err = user_input.ReadString('\n')
-
-	if err != nil {
-		fmt.Printf("Error: %v", err)
-		return "", err
+	// Check the pages that were requested are valid
+	for _, page := range pages {
+		if page < 1 {
+			return nil, fmt.Errorf("Invalid page number: %v", page)
+		}
 	}
 
-	// Convert the page number to an integer.
-	// First we trim and remove the newline character.
-	pageNum = pageNum[:len(pageNum)-1]
-	pageNumInt, err := strconv.Atoi(pageNum)
+	// Call pdf2text.py to parse the PDF file on each page
+	// and store the output in a dictionary.
+	var parsed_pages map[int]string = make(map[int]string)
 
-	if err != nil {
-		fmt.Printf("Error: %v", err)
-		return "", err
+	for _, page := range pages {
+		parsed_page, err := ParsePdfPage(pdf_path, page)
+		if err != nil {
+			fmt.Printf("Error: %v", err)
+			return nil, err
+		}
+		parsed_pages[page] = parsed_page
 	}
 
-	// Get the page.
-	page, err := reader.GetPage(pageNumInt)
-	if err != nil {
-		fmt.Printf("Error: %v", err)
-		return "", err
-	}
-
-	// Extract text from the page.
-	ex, err := extractor.New(page)
-	if err != nil {
-		fmt.Printf("Error: %v", err)
-		return "", err
-	}
-
-	text, err := ex.ExtractText()
-	if err != nil {
-		fmt.Printf("Error: %v\n", err)
-		return "", err
-	}
-	return text, nil
+	return parsed_pages, nil
 }

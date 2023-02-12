@@ -13,7 +13,7 @@ var ParseCmd = &cobra.Command{
 	Short:   "Parses a PDF and generates Anki cards",
 	Args:    cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		res, err := docparser.ParsePdf(args[0])
+		res, err := docparser.ParsePdf(args[0], []int{1})
 		if err != nil {
 			fmt.Println(err)
 		}

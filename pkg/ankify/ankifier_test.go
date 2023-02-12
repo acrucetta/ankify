@@ -11,10 +11,13 @@ func TestAnkify(t *testing.T) {
 
 	// Arrange
 	const anki_text string = "This is a test"
+	var anki_text_map = make(map[int]string)
+	anki_text_map[1] = anki_text
+
 	godotenv.Load("../../.env")
 
 	// Act
-	res, err := Ankify(anki_text)
+	res, err := Ankify(anki_text_map)
 
 	// Assert
 	if err != nil {

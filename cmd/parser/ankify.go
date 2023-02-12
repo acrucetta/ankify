@@ -14,24 +14,33 @@ var AnkifyCmd = &cobra.Command{
 	Use:     "ankify [file path]",
 	Aliases: []string{"a"},
 	Short:   "Parses a PDF and generates Anki cards",
-	Long:    `Parses a PDF and generates Anki cards, which are then printed to the console and saved as a txt file in your output folder. You may use the flag "type" or "t" to specify the input file type.`,
-	Args:    cobra.ExactArgs(1),
+	Long: `Parses a PDF and generates Anki cards, which are then printed to the console and saved as a txt file in your output folder. 
+	You may use the flag "type" or "t" to specify the input file type.
+	You may use the flag "page" or "p" to specify the page numbers to parse.`,
+	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 
 		// Get file type
-		fileType, _ := cmd.Flags().GetString("type")
+		file_type, _ := cmd.Flags().GetString("type")
 
-		var res string
+		// Get page numbers
+		var page_numbers []int
+		page_numbers, _ = cmd.Flags().GetIntSlice("page")
+
+		if len(page_numbers) == 0 {
+			page_numbers = []int{1}
+		}
+
+		var res map[int]string
 		var err error
 
-		if fileType == "txt" {
-			// Parse text file
+		if file_type == "txt" {
 			res, _ = docparser.ParseTxt(args[0])
-		} else if fileType == "pdf" {
-			res, _ = docparser.ParsePdf(args[0])
+		} else if file_type == "pdf" {
+			res, _ = docparser.ParsePdf(args[0], page_numbers)
 		} else {
 			fmt.Println("Flag 'type' must be either 'txt' or 'pdf, defaulting to 'txt'")
-			res, _ = docparser.ParsePdf(args[0])
+			res, _ = docparser.ParsePdf(args[0], page_numbers)
 		}
 
 		anki_cards, err := ankify.Ankify(res)
@@ -75,4 +84,5 @@ var AnkifyCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(AnkifyCmd)
 	AnkifyCmd.Flags().StringP("type", "t", "", "Type of file to parse, either 'txt' or 'pdf'")
+	AnkifyCmd.Flags().IntSliceP("pages", "p", []int{}, "Page numbers to parse")
 }

@@ -8,6 +8,8 @@ import (
 	"net/http"
 	"os"
 	"strings"
+
+	"github.com/joho/godotenv"
 )
 
 type OpenAIResponse struct {
@@ -40,6 +42,14 @@ const ANKI_TEXT = `Make 5 Anki cards for the following text, give it to me in th
 				more context to each question by searching the web for the answer.`
 
 func GetAnkiCards(anki_text string) (string, error) {
+
+	// Load the .env file
+	err := godotenv.Load(".env")
+	if err != nil {
+		fmt.Println(err)
+		return "", err
+	}
+
 	// Create a new HTTP client
 	client := &http.Client{}
 
@@ -136,11 +146,19 @@ func ParseAnkiText(anki_text string) (AnkiQuestions, error) {
 	return anki_cards, nil
 }
 
-func Ankify(anki_text string) (string, error) {
-	anki_cards, err := GetAnkiCards(anki_text)
-	if err != nil {
-		fmt.Println(err)
-		return "", err
+func Ankify(anki_text map[int]string) (string, error) {
+
+	anki_questions := ""
+	for _, text := range anki_text {
+
+		anki_response, err := GetAnkiCards(text)
+
+		if err != nil {
+			fmt.Println(err)
+			return "", err
+		}
+		anki_questions += anki_response
 	}
-	return anki_cards, nil
+
+	return anki_questions, nil
 }
