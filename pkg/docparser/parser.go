@@ -42,7 +42,7 @@ func ParseTxt(txt_path string) (string, error) {
 	return text, nil
 }
 
-func ParsePdf(pdfPath string) (string, error) {
+func ParsePdf(pdf_path string) (string, error) {
 
 	// Load environment variables
 	err_env := godotenv.Load(".env")
@@ -58,7 +58,7 @@ func ParsePdf(pdfPath string) (string, error) {
 		return "", err
 	}
 	// Load the PDF document
-	reader, f, err := model.NewPdfReaderFromFile(pdfPath, nil)
+	reader, f, err := model.NewPdfReaderFromFile(pdf_path, nil)
 	if err != nil {
 		fmt.Printf("Error: %v", err)
 		return "", err
