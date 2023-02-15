@@ -38,6 +38,8 @@ var AnkifyCmd = &cobra.Command{
 			res, _ = docparser.ParseTxt(args[0])
 		} else if file_type == "pdf" {
 			res, _ = docparser.ParsePdf(args[0], page_numbers)
+		} else if file_type == "url" {
+			res, _ = docparser.ParseUrl(args[0])
 		} else {
 			fmt.Println("Flag 'type' must be either 'txt' or 'pdf, defaulting to 'txt'")
 			res, _ = docparser.ParsePdf(args[0], page_numbers)
@@ -83,6 +85,6 @@ var AnkifyCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(AnkifyCmd)
-	AnkifyCmd.Flags().StringP("type", "t", "", "Type of file to parse, either 'txt' or 'pdf'")
+	AnkifyCmd.Flags().StringP("type", "t", "", "Type of file to parse, either 'txt', 'pdf', or 'url' (default is 'txt')")
 	AnkifyCmd.Flags().IntSliceP("pages", "p", []int{}, "Page numbers to parse, e.g., '1,2,3' (default is 1)")
 }

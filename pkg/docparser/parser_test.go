@@ -27,7 +27,7 @@ func TestParsePdfPage(t *testing.T) {
 	}
 }
 
-func TestParsePdfFree(t *testing.T) {
+func TestParsePdf(t *testing.T) {
 
 	// Arrange
 	const pdfPath string = "../../data/test.pdf"
@@ -42,4 +42,23 @@ func TestParsePdfFree(t *testing.T) {
 	if len(res) == 0 {
 		t.Error("Expected a non-empty array")
 	}
+}
+
+func TestParseUrl(t *testing.T) {
+
+	// Arrange
+	const url string = "https://jalammar.github.io/how-gpt3-works-visualizations-animations/"
+
+	// Act
+	res, err := ParseUrl(url)
+
+	// Assert
+	if err != nil {
+		t.Error(err)
+	}
+	if res == nil {
+		t.Error("Expected a non-empty string")
+	}
+
+	fmt.Println(res)
 }

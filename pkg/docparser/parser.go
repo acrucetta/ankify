@@ -3,12 +3,13 @@ package docparser
 import (
 	"bufio"
 	"fmt"
+	"net/http"
 	"os"
 	"os/exec"
 	"strconv"
+	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/api"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu"
+	"github.com/PuerkitoBio/goquery"
 )
 
 func ParseTxt(txt_path string) (map[int]string, error) {
@@ -37,15 +38,30 @@ func ParseTxt(txt_path string) (map[int]string, error) {
 	return res, nil
 }
 
-func GetMaxPages(pdf_path string) (int, error) {
-	// Read the PDF file
-	config := pdfcpu.NewDefaultConfiguration()
-	err := api.ExtractMetadataFile(pdf_path, "output", config)
-	if err != nil {
-		fmt.Printf("Error: %v", err)
-		return 0, err
+// This function is used to extract the raw text from a URL.
+func ParseUrl(url string) (map[int]string, error) {
+	// Ensure that the URL starts with http:// or https://
+	if !strings.HasPrefix(url, "http://") && !strings.HasPrefix(url, "https://") {
+		url = "http://" + url
 	}
-	return 0, nil
+
+	// Check if the URL is valid, return loggin error if not
+	_, err := http.Get(url)
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+
+	bodyText, err := getBodyTextFromURL(url)
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+
+	var body_text map[int]string = make(map[int]string)
+	body_text[1] = bodyText
+
+	return body_text, nil
 }
 
 // This function is used to parse a PDF file and return the text on a specific page.
@@ -96,4 +112,32 @@ func ParsePdf(pdf_path string, pages []int) (map[int]string, error) {
 	}
 
 	return parsed_pages, nil
+}
+
+func getBodyTextFromURL(url string) (string, error) {
+	resp, err := http.Get(url)
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+
+	doc, err := goquery.NewDocumentFromReader(resp.Body)
+	if err != nil {
+		return "", err
+	}
+
+	var bodyText string = doc.Find("body").Text()
+
+	// Remove newlines and tabs
+	bodyText = strings.ReplaceAll(bodyText, "\n", " ")
+	bodyText = strings.ReplaceAll(bodyText, "\t", " ")
+	bodyText = strings.ReplaceAll(bodyText, "\r", " ")
+
+	// Remove multiple spaces
+	bodyText = strings.ReplaceAll(bodyText, "  ", " ")
+
+	// Remove whitespace at the beginning and end of the string
+	bodyText = strings.TrimSpace(bodyText)
+
+	return bodyText, nil
 }
