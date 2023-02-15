@@ -151,14 +151,35 @@ func Ankify(anki_text map[int]string) (string, error) {
 	anki_questions := ""
 	for _, text := range anki_text {
 
-		anki_response, err := GetAnkiCards(text)
-
-		if err != nil {
-			fmt.Println(err)
-			return "", err
+		// Check the number of tokens in the text
+		// doesn't exceed the maximum number of tokens
+		// allowed by OpenAI (2048); if it does, split
+		// the text into multiple requests
+		var requests []string
+		if len(text) > 2048 {
+			// Split the text into multiple requests
+			// based on the number of tokens
+			num_splits := len(text) / 2048
+			for i := 0; i < num_splits; i++ {
+				// Get the start and end index of the text
+				start_index := i * 2048
+				end_index := (i + 1) * 2048
+				requests = append(requests, text[start_index:end_index])
+			}
+		} else {
+			requests = append(requests, text)
 		}
-		anki_questions += anki_response
-	}
 
+		// Loop through the requests and get the Anki cards
+		// for each request
+		for _, request := range requests {
+			anki_response, err := GetAnkiCards(request)
+			if err != nil {
+				fmt.Println(err)
+				return "", err
+			}
+			anki_questions += anki_response
+		}
+	}
 	return anki_questions, nil
 }
