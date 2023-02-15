@@ -178,8 +178,14 @@ func Ankify(anki_text map[int]string) (string, error) {
 				fmt.Println(err)
 				return "", err
 			}
-			anki_questions += anki_response
+			anki_questions += clean_questions(anki_response)
 		}
 	}
 	return anki_questions, nil
+}
+
+// Remove the ";" at the end of each question and answer
+func clean_questions(anki_questions string) string {
+	anki_questions = strings.ReplaceAll(anki_questions, ";", "")
+	return anki_questions
 }
