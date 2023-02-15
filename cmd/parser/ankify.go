@@ -2,6 +2,7 @@ package parser
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"time"
 
@@ -48,7 +49,7 @@ var AnkifyCmd = &cobra.Command{
 		anki_cards, err := ankify.Ankify(res)
 
 		if err != nil {
-			fmt.Println(err)
+			log.Fatal(err)
 		}
 
 		// Save string as txt using os package
@@ -68,14 +69,14 @@ var AnkifyCmd = &cobra.Command{
 		file, err := os.OpenFile(file_name, os.O_CREATE|os.O_WRONLY, 0644)
 
 		if err != nil {
-			fmt.Println(err)
+			log.Fatal(err)
 		}
 
 		// Write to file
 		_, err = file.WriteString(anki_cards)
 
 		if err != nil {
-			fmt.Println(err)
+			log.Fatal(err)
 		}
 
 		fmt.Println("Anki cards saved to " + file_name)
