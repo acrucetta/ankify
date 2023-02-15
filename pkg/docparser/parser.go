@@ -3,6 +3,7 @@ package docparser
 import (
 	"bufio"
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"os/exec"
@@ -48,13 +49,13 @@ func ParseUrl(url string) (map[int]string, error) {
 	// Check if the URL is valid, return loggin error if not
 	_, err := http.Get(url)
 	if err != nil {
-		fmt.Println(err)
+		log.Fatal(err)
 		return nil, err
 	}
 
 	bodyText, err := getBodyTextFromURL(url)
 	if err != nil {
-		fmt.Println(err)
+		log.Fatal(err)
 		return nil, err
 	}
 

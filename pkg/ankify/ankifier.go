@@ -48,7 +48,7 @@ func GetAnkiCards(anki_text string) (string, error) {
 	// Load the .env file
 	err := godotenv.Load(".env")
 	if err != nil {
-		fmt.Println(err)
+		log.Fatal(err)
 		return "", err
 	}
 
@@ -58,7 +58,7 @@ func GetAnkiCards(anki_text string) (string, error) {
 	// Create a new request
 	req, err := http.NewRequest("POST", API_URL, nil)
 	if err != nil {
-		fmt.Println(err)
+		log.Fatal(err)
 		return "", err
 	}
 
@@ -77,7 +77,7 @@ func GetAnkiCards(anki_text string) (string, error) {
 	json_data, err := json.Marshal(json_request)
 
 	if err != nil {
-		fmt.Println(err)
+		log.Fatal(err)
 		return "", err
 	}
 
@@ -86,7 +86,7 @@ func GetAnkiCards(anki_text string) (string, error) {
 	// Make the request
 	resp, err := client.Do(req)
 	if err != nil {
-		fmt.Println(err)
+		log.Fatal(err)
 		return "", err
 	}
 	defer resp.Body.Close()
@@ -94,7 +94,7 @@ func GetAnkiCards(anki_text string) (string, error) {
 	body, err := ioutil.ReadAll(resp.Body)
 
 	if err != nil {
-		fmt.Println(err)
+		log.Fatal(err)
 		return "", err
 	}
 
@@ -172,18 +172,19 @@ func Ankify(anki_text map[int]string) (string, error) {
 		} else {
 			requests = append(requests, text)
 		}
-		log.Printf("Splitting request into %d parts", num_splits)
+		log.Printf(`Splitting request into %d parts, the max number of words per request is 2048. 
+		The document has %d`, num_splits, len(text))
 
 		// Loop through the requests and get the Anki cards
 		// for each request
 		for i, request := range requests {
 			anki_response, err := GetAnkiCards(request)
 			if err != nil {
-				fmt.Println(err)
+				log.Fatal(err)
 				return "", err
 			}
 			// Log the request number using logger
-			log.Printf("Request %d of %d", i+1, len(requests))
+			log.Printf("Finished processing request %d of %d.", i+1, len(requests))
 			anki_questions += clean_questions(anki_response)
 		}
 	}
