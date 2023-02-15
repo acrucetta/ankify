@@ -31,6 +31,35 @@ Ankify can be run from the command line with the following command:
 
 ## Example
 
+### URL Example
+
+Here is an example of how to use Ankify to create flashcards from Paul Graham's "Need to Read" article (http://www.paulgraham.com/read.html).
+
+`go run main.go -t=url ankify http://www.paulgraham.com/read.html`
+
+```
+Q: What makes writing valuable?; 
+A: Writing is not just a way to convey ideas, but also a way to have them. A good writer will almost always discover new things in the process of writing, and there is no substitute for this kind of discovery. ; 
+
+Q: What kind of thinking can be done without writing?; 
+A: If you don't need to go too deeply into a problem, you can solve it without writing. If the problem can be described formally, it can sometimes be solved in one's head. ; 
+
+Q: What is the importance of being good at reading?; 
+A: You can't think well without writing well, and you can't write well without reading well. People who want to have ideas should still read. ; 
+
+Q: What does the author suggest is the best way to solve a complicated, ill-defined problem?; 
+A: Writing about it will almost always help to solve a complicated, ill-defined problem. Writing is a valuable tool for discovering new ideas and developing them further.['s']+a+'/r='+r+'/recdata='+csell_page_rec_data.join(',')); }  // Begin Yahoo Store Generated Code
+
+Q: What is an example of good writing?;
+A: Reading books and stories written by experienced authors is an example of good writing.;;
+
+Q: What does it mean to be “good at reading”?;
+A: Being “good at reading” means being able to extract meaning from the words, rather than simply extracting words from the page.;;
+
+```
+
+### PDF Example
+
 Here is an example of how to use Ankify to create flashcards from a PDF file named `test.pdf`, this pdf contains the seminal paper on MapReduce by Google.
 
 `go run main.go -t=pdf ankify test.pdf`
