@@ -9,6 +9,8 @@ import (
 	"os"
 	"strings"
 
+	"log"
+
 	"github.com/joho/godotenv"
 )
 
@@ -156,6 +158,7 @@ func Ankify(anki_text map[int]string) (string, error) {
 		// allowed by OpenAI (2048); if it does, split
 		// the text into multiple requests
 		var requests []string
+		var num_splits int = 1
 		if len(text) > 2048 {
 			// Split the text into multiple requests
 			// based on the number of tokens
@@ -169,15 +172,18 @@ func Ankify(anki_text map[int]string) (string, error) {
 		} else {
 			requests = append(requests, text)
 		}
+		log.Printf("Splitting request into %d parts", num_splits)
 
 		// Loop through the requests and get the Anki cards
 		// for each request
-		for _, request := range requests {
+		for i, request := range requests {
 			anki_response, err := GetAnkiCards(request)
 			if err != nil {
 				fmt.Println(err)
 				return "", err
 			}
+			// Log the request number using logger
+			log.Printf("Request %d of %d", i+1, len(requests))
 			anki_questions += clean_questions(anki_response)
 		}
 	}
