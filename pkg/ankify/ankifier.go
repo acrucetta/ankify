@@ -160,7 +160,7 @@ func Ankify(anki_text map[int]string) (AnkiQuestions, error) {
 		if len(text) > 2048 {
 			// Split the text into multiple requests
 			// based on the number of tokens
-			num_splits := len(text) / 2048
+			num_splits = len(text) / 2048
 			for i := 0; i < num_splits; i++ {
 				// Get the start and end index of the text
 				start_index := i * 2048
