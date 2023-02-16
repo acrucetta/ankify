@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 
 	"log"
@@ -34,9 +35,10 @@ type AnkiQuestion struct {
 }
 
 const API_URL = "https://api.openai.com/v1/completions"
-const PROMPT_HELPER = `Make 5 Anki cards for the following text, give it to me in the following format: Q: [Insert question here] A: [Insert answer here] \n\n The text is the following: {text}`
+const QUESTION_HELPER = `Make {card_num} Anki cards for the following text, give it to me in the following format: Q: [Insert question here] A: [Insert answer here] \n\n The text is the following: {text}`
+const SUMMARY_HELPER = `Summarize the following text into less than 150 words; keep the technical details: {text}`
 
-func GetAnkiCards(raw_text string) (string, error) {
+func CallOpenAI(prompt string) (string, error) {
 
 	// Create a new HTTP client
 	client := &http.Client{}
@@ -51,8 +53,6 @@ func GetAnkiCards(raw_text string) (string, error) {
 	var API_KEY string = os.Getenv("OPENAI_KEY")
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Authorization", "Bearer "+API_KEY)
-
-	prompt := strings.Replace(PROMPT_HELPER, "{text}", raw_text, 1)
 
 	json_request := OpenAIRequest{
 		Model:       "text-davinci-003",
@@ -172,24 +172,36 @@ func Ankify(anki_text map[int]string) (AnkiQuestions, error) {
 		}
 		log.Printf(`Splitting request into %d parts, the max number of words per request is 2048. The document has %d words.`, num_splits, len(text))
 
-		// Loop through the requests and get the Anki cards
-		// for each request
+		// Loop through the requests and summarize each request
+		// using OpenAI
+		var requests_summaries string = ""
 		for i, request := range requests {
-			anki_response, err := GetAnkiCards(request)
+			// Create the prompt for OpenAI
+			summary_prompt := strings.Replace(SUMMARY_HELPER, "{text}", request, 1)
+			anki_response, err := CallOpenAI(summary_prompt)
 			if err != nil {
 				log.Fatal(err)
 				return AnkiQuestions{}, err
 			}
 			// Log the request number using logger
 			log.Printf("Finished processing request %d of %d.", i+1, len(requests))
-			parsed_questions, err := ParseAnkiText(anki_response)
-
-			if err != nil {
-				log.Fatal(err)
-				return AnkiQuestions{}, err
-			}
-			anki_questions.Questions = append(anki_questions.Questions, parsed_questions.Questions...)
+			requests_summaries += anki_response
 		}
+
+		// Call the OpenAI API to create the anki cards from the summary
+		anki_prompt := strings.Replace(QUESTION_HELPER, "{text}", requests_summaries, 1)
+		anki_prompt = strings.Replace(anki_prompt, "{num_questions}", strconv.Itoa(7), 1)
+		anki_response, err := CallOpenAI(anki_prompt)
+		if err != nil {
+			log.Fatal(err)
+			return AnkiQuestions{}, err
+		}
+		parsed_questions, err := ParseAnkiText(anki_response)
+		if err != nil {
+			log.Fatal(err)
+			return AnkiQuestions{}, err
+		}
+		anki_questions.Questions = append(anki_questions.Questions, parsed_questions.Questions...)
 	}
 	return anki_questions, nil
 }

@@ -1,3 +1,4 @@
 # Ignoring environment variables
 .env
-.txt
+*.txt
+*.json
