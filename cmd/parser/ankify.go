@@ -1,6 +1,7 @@
 package parser
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -15,7 +16,7 @@ var AnkifyCmd = &cobra.Command{
 	Use:     "ankify [file path]",
 	Aliases: []string{"a"},
 	Short:   "Parses a PDF and generates Anki cards",
-	Long: `Parses a PDF and generates Anki cards, which are then printed to the console and saved as a txt file in your output folder. 
+	Long: `Parses a PDF and generates Anki cards, which are then printed to the console and saved as a JSON file in your output folder. 
 	You may use the flag "type" or "t" to specify the input file type.
 	You may use the flag "page" or "p" to specify the page numbers to parse.`,
 	Args: cobra.ExactArgs(1),
@@ -55,7 +56,7 @@ var AnkifyCmd = &cobra.Command{
 		// Save string as txt using os package
 		// Create file name based on date and time
 		const folder string = "output"
-		var file_name string = time.Now().Format("2006-01-02_15-04-05") + ".txt"
+		var file_name string = time.Now().Format("2006-01-02_15-04-05") + ".json"
 
 		// Create output folder if it doesn't exist
 		if _, err := os.Stat(folder); os.IsNotExist(err) {
@@ -72,15 +73,17 @@ var AnkifyCmd = &cobra.Command{
 			log.Fatal(err)
 		}
 
+		// Write to JSON file using the "Question" and "Answer" fields
+		anki_questions_json, _ := json.Marshal(anki_cards)
+
 		// Write to file
-		_, err = file.WriteString(anki_cards)
+		_, err = file.Write(anki_questions_json)
 
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		fmt.Println("Anki cards saved to " + file_name)
-
+		log.Println("Anki cards saved to " + file_name)
 	},
 }
 

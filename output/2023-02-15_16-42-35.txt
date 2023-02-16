@@ -1,0 +1,411 @@
+ Q: What are the main components of a modern web browser? A: The main components of a modern web browser include the rendering engine, the parsing and DOM tree construction, scripts, style sheets, render tree construction, style computation, layout, painting, and resources.ompage
+
+Q: What is the most widely used software?
+A: Web browsers are probably the most widely used software.
+
+Q: What are the five major browsers used today?
+A: The five major browsers used today are Internet Explorer, Firefox, Safari, Chrome and Opera.
+
+Q: What is the main functionality of a browser?
+A: The main functionality of a browser is to present the web resource chosen by the user, by requesting it from the server and displaying it on the browser window.
+
+Q: Who maintains the HTML and CSS specifications?
+A: The HTML and CSS specifications are maintained by the World Wide Web Consortium (W3C) organization, which is the standards organization for the web.
+
+Q: What are some common user interface elements of browsers?
+A: Common user interface elements of browsers include an address bar for inserting the URI, back and forward buttons, bookmarking options, a refresh and stop buttons for refreshing and stopping the loading of current documents, and a home button that gets you to your homepage. a multi process architecture. This means that the browser is actually a collection of processes - each dedicated to a specific task like user interface, networking etc. The processes communicate with each other using IPC (Inter Process Communication). 
+
+Q: What are the main components of a browser? 
+A: The main components of a browser are the user interface, the browser engine, the rendering engine, networking, UI backend, JavaScript interpreter, and data storage.
+
+Q: What is the purpose of the rendering engine?
+A: The rendering engine is responsible for displaying the requested content. It parses HTML and CSS and displays the parsed content on the screen.
+
+Q: What is the difference between Firefox and Chrome?
+A: Unlike most browsers, Chrome holds multiple instances of the rendering engine - one for each tab. Each tab is a separate process. Firefox does not have this feature.
+
+Q: How do the components of a browser communicate with each other?
+A: The components of a browser communicate with each other using IPC (Inter Process Communication).
+
+Q: What is the HTML5 specification?
+A: The HTML5 specification is a markup language used for structuring and presenting content on the World Wide Web. It defines 'web database' which is a complete (although light) database in the browser. Q: What is the responsibility of the rendering engine? 
+A: The responsibility of the rendering engine is to display the requested contents on the browser screen, such as HTML and XML documents and images. 
+Q: What rendering engines are used by Firefox, Chrome and Safari? 
+A: Firefox uses Gecko, a "home made" Mozilla rendering engine, while both Safari and Chrome use Webkit, an open source rendering engine. 
+Q: What is the main flow of the rendering engine? 
+A: The main flow of the rendering engine is to start getting the contents of the requested document from the networking layer, parse the HTML document and turn the tags to DOM nodes in a tree called the "content tree", parse the style data, both in external CSS files and in style elements, create another tree - the render tree, which contains rectangles with visual attributes like color and dimensions, go through a "layout" process, which means giving each node the exact coordinates where it should appear on the screen, and traverse the render tree and paint each node using the UI backend layer. 
+Q: What is the purpose of the render tree? 
+A: The render tree contains rectangles with visual attributes like color and dimensions and is used to create the order in which the content should be displayed on the screen. 
+Q: What is the UI backend layer? 
+A: The UI backend layer is a software interface between the rendering engine and the operating system's user interface. It is responsible for drawing basic elements of the user interface such as windows and buttons, and it handles input from the user such as mouse and keyboard events.
+
+Q: What is the purpose of the rendering engine?
+A: The rendering engine's purpose is to display contents on the screen as soon as possible, without waiting until all HTML is parsed before starting to build and layout the render tree.
+
+Q: What are the main flow examples of the Webkit and Gecko rendering engines?
+A: The main flow examples of the Webkit rendering engine is the Render Tree and the main flow example of the Gecko rendering engine is the Frame Tree.
+
+Q: What is parsing?
+A: Parsing is the process of translating a document into a structure that makes sense and can be used by the code. The result of parsing is usually a tree of nodes that represent the structure of the document, also known as a parse tree or a syntax tree.
+
+Q: What is a context free grammar?
+A: A context free grammar is a set of syntax rules that a document must obey in order to be parsed. It consists of vocabulary and syntax rules and is used as a basis for parsing.
+
+Q: What is an example of a parse tree?
+A: An example of a parse tree is a tree of nodes that represent the structure of a mathematical expression, such as "2 + 3 - 1". This would return a tree with three nodes: 2, +, and -.
+
+Q: What is lexical analysis?
+A: Lexical analysis is the process of breaking the input into tokens. Tokens are the language vocabulary - the collection of valid building blocks. In human language it will consist of all the words that appear in the dictionary for that language. 
+
+Q: What is syntax analysis?
+A: Syntax analysis is the applying of the language syntax rules. Parsers usually divide the work between two components - the lexer (sometimes called tokenizer) that is responsible for breaking the input into valid tokens, and the parser that is responsible for constructing the parse tree by analyzing the document structure according to the language syntax rules. 
+
+Q: What is the purpose of parsing?
+A: Parsing is used to break down a document into its component parts so that it can be analyzed and understood. Parsing can also be used in translation - transforming the input document to another format. An example is compilation, where the compiler that compiles a source code into machine code first parses it into a parse tree and then translates the tree into a machine code document. 
+
+Q: What is the vocabulary of a language?
+A: The vocabulary of a language is the collection of valid building blocks that make up the language. In human language it will consist of all the words that appear in the dictionary for that language. 
+
+Q: What is the iterative process of parsing?
+A: The parsing process is iterative. The parser will usually ask the lexer for a new token and try to match the token with one of the syntax rules. If a rule is matched, a node corresponding to the token will be added to the parse tree and the parser will ask for another token. If no rule matches, the parser will store the token internally, and keep asking for tokens until a rule matching all the internally stored tokens is found. If no rule is found then the parser will raise an exception. This means the document was not valid and contained syntax errors. il start by trying to match the expression rule. It will try to match a term followed by an operation followed by another term. Bottom up parser will start by matching the first substring that matches a rule. In our example it will start by matching the "2" substring according to rule #5 it is a term.Q: What is an expression in our language? A: An expression is defined as a "term" followed by an "operation" followed by another term. 
+Q: What are the two types of parsers? A: The two types of parsers are top down parsers and bottom up parsers. 
+Q: What does a top down parser do? A: A top down parser sees the high level structure of the syntax and tries to match one of them. 
+Q: What does a bottom up parser do? A: A bottom up parser starts with the input and gradually transform it into the syntax rules, starting from the low level rules until high level rules are met. 
+Q: What is a context free grammar? A: A context free grammar is a grammar that can be entirely expressed in BNF. For a formal definition see http://en.wikipedia.org/wiki/Context-free_grammar. fun). HTML is not a context free grammar, because the syntax of HTML is not recursive. 
+
+Q: What type of parser is used in Webkit? 
+A: Webkit uses two well known parser generators - Flex for creating a lexer and Bison for creating a parser (you might run into them with the names Lex and Yacc).
+
+Q: What job does the HTML parser do? 
+A: The job of the HTML parser is to parse the HTML markup into a parse tree.
+
+Q: What is the current version of HTML? 
+A: The current version is HTML4 and work on HTML5 is in progress.
+
+Q: What type of grammar is HTML? 
+A: HTML is not a context free grammar, because the syntax of HTML is not recursive.
+
+Q: How does a bottom up parser work? 
+A: A bottom up parser will scan the input until a rule is matched it will then replace the matching input with the rule. This will go on until the end of the input. The partly matched expression is placed on the parsers stack.o World  </p> </body> </html>
+
+Q: What is HTML? 
+A: HTML (HyperText Markup Language) is a markup language used to create web pages. It is used to structure and present content on the World Wide Web. 
+Q: What is the difference between HTML and XML? 
+A: HTML and XML are both markup languages, but HTML is more "forgiving" than XML. HTML allows for certain tags to be omitted and for tags to be started or ended in different ways, while XML is more rigid in its syntax. 
+Q: What is DTD? 
+A: DTD (Document Type Definition) is a formal format for defining HTML. It is used to define languages of the SGML family and contains definitions for all allowed elements, their attributes, and hierarchy. 
+Q: What is DOM? 
+A: DOM (Document Object Model) is the object presentation of the HTML document and the interface of HTML elements to the outside world, such as JavaScript. The DOM has an almost one-to-one relation to the markup. 
+Q: What is the purpose of the strict mode in the HTML DTD? 
+A: The strict mode in the HTML DTD conforms solely to the specifications, while other modes contain support for markup used by browsers in the past. The purpose of this is backwards compatibility with older content.
+
+Q: What is DOM?
+A: The Document Object Model (DOM) is a cross-platform and language-independent interface that treats an HTML, XHTML, or XML document as a tree structure wherein each node is an object representing a part of the document
+
+Q: What organization is responsible for DOM?
+A: The World Wide Web Consortium (W3C) is responsible for the development of the Document Object Model (DOM)
+
+Q: What is the parsing algorithm for HTML?
+A: The parsing algorithm for HTML consists of two stages: tokenization and tree construction. Tokenization is the lexical analysis, parsing the input into tokens such as start tags, end tags, attribute names, and attribute values. The tokenizer recognizes the token, gives it to the tree constructor, and consumes the next character for recognizing the next token until the end of the input
+
+Q: What is the tokenization algorithm?
+A: The tokenization algorithm is expressed as a state machine. Each state consumes one or more characters of the input stream and updates the next state according to those characters. The algorithm's output is an HTML token
+
+Q: What is the HTML5 specification?
+A: The HTML5 specification is a set of rules for the structuring and presentation of content on the World Wide Web. It defines the fifth major version of the HTML language and is maintained by the World Wide Web Consortium (W3C).readed. For example, a "Start tag token" will cause creation of a new Element node. This node will be added to the current node in the tree. 
+
+Q: What is the initial state of the tokenization process?
+A: The initial state is the "Data state".
+
+Q: What happens when an 'a-z' character is encountered?
+A: When an 'a-z' character is encountered, the state is changed to "Tag open state" and a "Start tag token" is created, with the character appended to the token name.
+
+Q: What happens when the '>' character is encountered?
+A: When the '>' character is encountered, the current token is emitted and the state changes back to the "Data state".
+
+Q: What is created during the tree construction stage?
+A: During the tree construction stage, the DOM tree with the Document in its root is modified and elements are added to it.
+
+Q: What happens when a "Start tag token" is encountered?
+A: When a "Start tag token" is encountered, a new Element node is created and added to the current node in the tree. the perfect HTML code. Browsers are very tolerant to HTML errors and they will try to recover from them. For example if you forget to close a tag the browser will close it automatically. 
+
+Q: What is the tree construction process? 
+A: The tree construction process is an algorithm that is used to create an element object for each token and add it to the DOM tree. It is also used to correct nesting mismatches and unclosed tags. The algorithm is also described as a state machine with different "insertion modes". 
+Q: What is the initial mode of the tree construction process?
+A: The initial mode of the tree construction process is the "before html" mode.
+Q: What happens when the browser receives the "body" token?
+A: When the browser receives the "body" token, an HTMLHeadElement is created implicitly and it is added to the tree. The state is then changed to "before head".
+Q: What happens when the browser receives character tokens?
+A: When the browser receives character tokens, a "Text" node is created and the other characters are appended to that node.
+Q: What happens when the parsing is finished?
+A: When the parsing is finished, the browser will mark the document as interactive and start parsing scripts that are in "deferred" mode. The document state will be set to "complete" and a "load" event will be fired.. Q: What is an example of an Invalid Syntax error on an HTML page? A: An example of an Invalid Syntax error on an HTML page is when the HTML code contains a tag that is not standard, wrong nesting of elements, or other mistakes. For example: <html>  <mytag>  </mytag>  <div>  <p>  </div>  Really lousy HTML  </p> </html>
+
+ii. Q: How do browsers fix an invalid content? A: Browsers try to fix invalid content by attempting to close all tags up to the one that forbids the element, and add it afterwards, closing all inline elements up to the next higher block element, or ignoring the tag. Webkit is known for its error tolerance, providing fixes for known invalid HTML constructs.
+
+iii. Q: What is the HTML5 specification? A: The HTML5 specification is a set of rules for how web pages should be structured and presented. It defines some of the requirements for error handling in browsers, including bookmarking and back/forward buttons. It also provides guidance on how to handle invalid HTML constructs in a conformant way with other browsers.
+
+iv. Q: What is the HTML parser class? A: The HTML parser class is a part of the HTML5 specification which parses tokenized input into the document, building up the document tree. It is responsible for error handling and trying to fix author mistakes, such as when the person writing the document forgot some tag or when a block element is added inside an inline element.
+
+v. Q: What are the four error conditions that the HTML parser class must take care of? A: The four error conditions that the HTML parser class must take care of are: 1) when the element being added is explicitly forbidden inside some outer tag 2) when a tag is not allowed to be added directly 3) when a block element is added inside an inline element and 4) when none of the above help, closing elements until it is allowed to add the element or ignoring the tag. broken page in webkit, don't close the body tag prematurely.
+
+Q: What is the purpose of the code "if (t->isCloseTag(brTag) && m_document->inCompatMode()) { reportError(MalformedBRError) t->beginTag = true }"?
+A: The code is used to enable compatibility with Internet Explorer and Firefox Webkit by treating the code like a line break (<br>).
+
+Q: What is a stray table?
+A: A stray table is a table inside another table contents but not inside a table cell.
+
+Q: What happens when a user puts a form inside another form?
+A: The second form is ignored by Webkit.
+
+Q: What is the code for limiting the nesting of tags of the same type?
+A: The code is "bool HTMLParser::allowNestedRedundantTag(const AtomicString& tagName) { unsigned i = 0 for (HTMLStackElem* curr = m_blockStack     i < cMaxRedundantTagDepth && curr && curr->tagName == tagName   curr = curr->next, i++) { } return i != cMaxRedundantTagDepth }"
+
+Q: What does Webkit do if the html or body end tags are misplaced?
+A: Webkit will not close the body tag prematurely, in order to support really broken HTML.eses a CSS parser to parse the stylesheets. This parser is based on a recursive descent parser. It follows the CSS grammar, defined in the CSS specification. 
+Q: What is the CSS grammar defined in the CSS specification? 
+A: The CSS grammar is defined by regular expressions for each token, such as comment, num, nonascii, nmstart, nmchar, name, ident, ruleset, selector, simple_selector, class, element_name, attrib, pseudo 
+Q: What type of parser does Webkit use? 
+A: Webkit uses a CSS parser based on a recursive descent parser to parse stylesheets 
+Q: What is a ruleset in CSS? 
+A: A ruleset in CSS is a selector or optionally number of selectors separated by a coma and spaces, with curly braces containing the rules that are applied by this ruleset 
+Q: What does the "S" stand for in the CSS grammar definition? 
+A: In the CSS grammar definition, "S" stands for white space 
+Q: What is an example of a declaration in a ruleset? 
+A: An example of a declaration in a ruleset is a property and value, such as color:red font-weight:bold.Q: What is the order of processing scripts and style sheets?
+A: Scripts are parsed and executed immediately when the parser reaches a <script> tag. The parsing of the document halts until the script was executed. Style sheets on the other hand have a different model and conceptually it seems that since style sheets don't change the DOM tree, there is no reason to wait for them and stop the document parsing.
+Q: What is the HTML5 option for scripts?
+A: HTML5 adds an option to mark the script as asynchronous so it will be parsed and executed by a different thread.
+Q: What is Speculative Parsing?
+A: Speculative Parsing is an optimization done by Webkit and Firefox where while executing scripts, another thread parses the rest of the document and finds out what other resources need to be loaded from the network and loads them. These way resources can be loaded on parallel connections and the overall speed is better.
+Q: What is Bison?
+A: Bison is a parser generator used to create bottom up shift reduce parsers. It is used to create parsers automatically from the CSS grammar files.
+Q: What objects does a StyleSheet object contain?
+A: A StyleSheet object contains CSS rules. The CSS rule objects contain selector and declaration objects and other object corresponding to CSS grammar.       o = new (arena) RenderBlock(node)       break     case INLINE_BLOCK:       o = new (arena) RenderBlock(node)       o->setInline(true)       break     case LIST_ITEM:       o = new (arena) RenderListItem(node)       break     case RUN_IN:       o = new (arena) RenderRunIn(node)       break     case COMPACT:       o = new (arena) RenderCompact(node)       break     case INLINE_TABLE:       o = new (arena) RenderTable(node)       o->setInline(true)       break     case TABLE:       o = new (arena) RenderTable(node)       break     case TABLE_ROW_GROUP:       o = new (arena) RenderTableSection(node)       break     case TABLE_ROW:       o = new (arena) RenderTableRow(node)       break     case TABLE_COLUMN_GROUP:       o = new (arena) RenderTableCol(node)       break     case TABLE_COLUMN:       o = new (arena) RenderTableCol(node)       break     case TABLE_CELL:       o = new (arena) RenderTableCell(node)       break     case TABLE_CAPTION:       o = new (arena) RenderBlock(node)       break     case BOX:       o = new (arena) RenderBox(node)       break     case INLINE_BOX:       o = new (arena) RenderBox(node)       o->setInline(true)       break   }   ...   return o } 
+
+Q: What is the purpose of the render tree? 
+A: The render tree is of visual elements in the order in which they will be displayed. It is the visual representation of the document and its purpose is to enable painting the contents in their correct order.
+Q: What does Firefox call the elements in the render tree?
+A: Firefox calls the elements in the render tree "frames".
+Q: What is the RenderObject class in Webkit?
+A: The RenderObject class in Webkit is the base class of the renderers and it contains geometric information like width, height and position. It also contains methods to layout and paint itself and its children.
+Q: What is the purpose of the "display" style attribute?
+A: The "display" style attribute is used to determine the type of renderer that should be created for a DOM node, according to the display attribute.
+Q: How does Webkit decide what type of renderer should be created for a DOM node?
+A: Webkit decides what type of renderer should be created for a DOM node by using the "display" style attribute. The display attribute is used to determine the box type and the type of renderer that should be created for the DOM node.
+
+Q: What is the element type considered for when creating a special renderer?
+A: The element type is considered for when creating a special renderer in order to create a special frames for form controls and tables. 
+
+Q: What is the relation between the render tree and the DOM tree?
+A: The relation between the render tree and the DOM tree is not one to one, as non-visual DOM elements will not be inserted in the render tree, and elements with "display: none" will also not appear in the tree. Additionally, some DOM nodes may correspond to multiple visual objects, and some render objects may not be placed in the same place in the tree as their corresponding DOM node. 
+
+Q: What is the initial containing block in Webkit?
+A: The initial containing block in Webkit is the "RenderView" object, also known as the "Viewport". 
+
+Q: What happens when an inline element contains mixed content?
+A: When an inline element contains mixed content, anonymous block renderers will be created to wrap the inline elements in order to comply with the CSS specification. 
+
+Q: What are floats and absolutely positioned elements?
+A: Floats and absolutely positioned elements are out of flow elements, meaning they are placed in a different place in the tree than their corresponding DOM node. They are mapped to a placeholder frame which is where they should have been in the tree.ugh performance issue.
+
+Q: What is the process of resolving style and creating a renderer in Webkit? 
+A: The process of resolving the style and creating a renderer in Webkit is called "attachment", and every DOM node has an "attach" method. 
+
+Q: What is the top most block that contains all other blocks in the render tree? 
+A: The root render object corresponds to what the CSS spec calls the containing block - the top most block that contains all other blocks. 
+
+Q: What are the origins of style sheets? 
+A: The origins of style sheets are the browser's default style sheets, the style sheets provided by the page author and user style sheets - these are style sheets provided by the browser user. 
+
+Q: What are the difficulties of style computation? 
+A: The difficulties of style computation are style data being a very large construct, holding the numerous style properties, which can cause memory problems, and finding the matching rules for each element can cause performance issues if it's not optimized. 
+
+Q: What is the render object that the document points to in the render tree? 
+A: The render object that the document points to in the render tree is the root render object, which corresponds to what the CSS spec calls the containing block - the top most block that contains all other blocks. Its dimensions are the viewport - the browser window display area dimensions. are the nodes of the style context tree. They contain the rules applicable for their content. The rule tree is a tree of rules. It contains all rules that apply to the document. It is used to quickly find applicable rules for a given element.
+
+Q: What is a compound selector? 
+A: A compound selector is a selector that consists of two or more individual selectors joined together with a combinator, such as a space, a + sign, or a > sign. For example - this compound selector: div div div div{ ... } Means the rules apply to a "<div>" who is the descendant of 3 divs. 
+
+Q: What are the conditions that must be met in order for Webkit nodes to share style data? 
+A: The elements must be in the same mouse state (e.g., one can't be in :hover while the other isn't), neither element should have an id, the tag names should match, the class attributes should match, the set of mapped attributes must be identical, the link states must match, the focus states must match, neither element should be affected by attribute selectors, there must be no inline style attribute on the elements, and there must be no sibling selectors in use at all. 
+
+Q: What is the rule tree in Firefox? 
+A: The rule tree in Firefox is a tree of rules which contains all rules that apply to the document. It is used to quickly find applicable rules for a given element. 
+
+Q: What is the style context tree in Firefox? 
+A: The style context tree in Firefox is a tree of style contexts which contain the rules applicable for their content. It is used to quickly find applicable rules for a given element. 
+
+Q: What is the difference between the rule tree and style context tree in Firefox? 
+A: The rule tree in Firefox is a tree of rules which contains all rules that apply to the document. The style context tree in Firefox is a tree of style contexts which contain the rules applicable for their content. The rule tree is used to quickly find applicable rules for a given element, while the style context tree is used to quickly find applicable rules for a given element.
+
+Q: What is the rule tree idea?
+A: The rule tree idea is a way of sharing values between nodes to avoid computing them again. It enables the computation of values by applying all the matching rules in the correct order and performing manipulations that transform them from logical to concrete values. 
+
+Q: What is the purpose of dividing style contexts into structs?
+A: The purpose of dividing style contexts into structs is to contain style information for a certain category like border or color. Structs contain properties that are either inherited or non inherited, with non inherited properties using default values if not defined. 
+
+Q: How does the tree save work?
+A: The tree saves work by caching entire structs (containing the computed end values) in the tree. If the bottom node didn't supply a definition for a struct, a cached struct in an upper node can be used. 
+
+Q: How is computing the style contexts using the rule tree done?
+A: Computing the style contexts using the rule tree is done by first computing a path in the rule tree or using an existing one, and then applying the rules in the path to fill the style context structs. 
+
+Q: What is the idea behind seeing the tree paths as words in a lexicon?
+A: The idea behind seeing the tree paths as words in a lexicon is that if a certain element needs to match rules, and the matched rules (in the correct order) are already found in the tree, then there is less work to do. This saves time and space. look like this:  Figure 13: The context tree 
+
+Q: What is the highest precedence selector?
+A: The most specific selector, usually the most specific selector. 
+
+Q: What is the best optimization when there is no specification for the struct in a rule node?
+A: Go up the tree until a node is found that specifies it fully and simply point to it. This saves computation of end values and memory. 
+
+Q: What happens when the most specific node does add values?
+A: We need to do some extra calculations for transforming it to actual values. We then cache the result in the tree node so it can be used by children. 
+
+Q: What happens when an element has a sibling or a brother that points to the same tree node?
+A: The entire style context can be shared between them. 
+
+Q: What are the two structs in the example given?
+A: The color struct contains only one member - the color. The margin struct contains the four sides.ull tree, the inheritance is done inside the style context. 
+
+Q: What is the context tree?
+A: The context tree is a representation of the HTML document that is used to apply CSS rules and styles to elements. It is composed of nodes that represent elements and their relationships in the HTML document.
+
+Q: What do we need to do when we parse the HTML and get to the second <div> tag?
+A: We need to create a style context for the second <div> tag and fill its style structs. We will match the rules and discover the matching rules for the <div>.
+
+Q: How do we find the existing path in the tree for the element?
+A: We will create a style context and put it in the context tree. The new style context will point to the node specified by the matching rules in the rule tree.
+
+Q: How do we fill the style structs?
+A: We will begin by filling out the margin struct. If the last rule node does not add to the margin struct, we can go up the tree until we find a cached struct computed in a previous node insertion and use it. We will fill the color struct by computing the end value (convert string to RGB etc) and caching the computed struct on this node.
+
+Q: What is done differently in Webkit when compared to Firefox in terms of inheritance?
+A: In Firefox, caching is done on the context tree for structs that contain rules that are inherited from the parent. In Webkit, who does not have a rule tree, the inheritance is done inside the style context.
+
+Q: What is the purpose of manipulating the style rules? 
+A: The purpose of manipulating the style rules is to make it easier to match them to the element by adding them to one of several hash maps according to the selector. This optimization eliminates 95+% of the rules, so that they need not even be considered during the matching process.  
+Q: What is the order of traversal for the matched declarations? 
+A: The order of traversal for the matched declarations is first non important high priority properties, then high priority important, then normal priority non important, then normal priority important rules. This means that properties that appear multiple times will be resolved according to the correct cascade order. The last wins.  
+Q: What is the purpose of sharing the style objects? 
+A: The purpose of sharing the style objects is to solve issues 1 and 3, which involve applying the properties in the correct order.  
+Q: What are the sources for style rules? 
+A: The sources for style rules are CSS rules, either in external style sheets or in style elements, inline style attributes, and HTML visual attributes.  
+Q: What is the Firefox rule tree? 
+A: The Firefox rule tree is a data structure used to match CSS declarations to elements on a web page. It is used to apply the properties in the correct order, and helps to ensure that the correct cascade order is used when resolving properties that appear multiple times.y calculation algorithm. It is calculated by counting the number of id's, classes and elements in the selector. 
+
+Q: What is the cascade order for style sheets in CSS2? 
+A: The cascade order is (from low to high): Browser declarations User normal declarations Author normal declarations Author important declarations User important declarations. 
+
+Q: How is the specifity of a selector calculated in CSS2? 
+A: The specifity of a selector is calculated by counting the number of id's, classes and elements in the selector. 
+
+Q: What is the HTML visual attributes translated to in CSS2? 
+A: The HTML visual attributes are translated to matching CSS declarations and are treated as author rules with low priority. 
+
+Q: What is the purpose of the class map in CSS2? 
+A: The class map will contain an "error" key under which the rule for "p.error" is found. 
+
+Q: What is the purpose of the id map in CSS2? 
+A: The id map will contain relevant rules for the div element and the key is the id.
+
+Q: What is the formula for calculating CSS specificity? 
+A: The formula for calculating CSS specificity is a-b-c-d, where a is the number of style attributes, b is the number of ID attributes in the selector, c is the number of other attributes and pseudo-classes in the selector, and d is the number of element names and pseudo-elements in the selector.  
+Q: How does Webkit sort the rules? 
+A: Webkit sorts the rules according to the cascade rules. For small lists, Webkit uses bubble sort, and for large lists, it uses merge sort. It implements sorting by overriding the ">" operator for the rules.  
+Q: What is the flag that marks if all top level style sheets (including @imports) have been loaded? 
+A: The flag that marks if all top level style sheets (including @imports) have been loaded is "style is not fully loaded when attached".  
+Q: What is the highest count you can have in one of the categories for calculating specificity? 
+A: The highest count you can have in one of the categories for calculating specificity is 17.  
+Q: What is the number base you need to use when a=14? 
+A: When a=14, the number base you need to use is hexadecimal.ou
+
+Q: What is the coordinate system used in HTML? 
+A: The coordinate system is relative to the root frame. Top and left coordinates are used. 
+Q: What is a "dirty bit" system? 
+A: A "dirty bit" system is a way for browsers to not do a full layout for every small change. A renderer that is changed or added marks itself and its children as "dirty" - needing layout. 
+Q: What is global layout? 
+A: Global layout is triggered on the entire render tree and can happen as a result of a global style change that affects all renderers, like a font size change, or as a result of a screen being resized. 
+Q: What is incremental layout? 
+A: Incremental layout is when only the dirty renderers are laid out and can cause some damage which will require extra layouts. 
+Q: What is the flow based layout model used in HTML? 
+A: The flow based layout model used in HTML is a model in which it is possible to compute the geometry in a single pass. Elements later "in the flow" typically do not affect the geometry of elements that are earlier "in the flow", so layout can proceed left-to-right, top-to-bottom through the document. "metrics" object (nsHTMLReflowMetrics) that includes the width and height of the renderer. 
+Q: What is incremental layout?
+A: Incremental layout is when only dirty renderers and their children are layed out. It is done asynchronously, where Firefox queues "reflow commands" and Webkit has a timer that executes an incremental layout. It is triggered when new renderers are appended to the render tree after extra content came from the network and was added to the DOM tree. 
+
+Q: What triggers an asynchronous layout?
+A: An asynchronous layout is triggered when new renderers are appended to the render tree after extra content came from the network and was added to the DOM tree. 
+
+Q: What is the layout process?
+A: The layout process usually has the following pattern: Parent renderer determines its own width, goes over children and places the child renderer (sets its x and y), calls child layout if needed (they are dirty or we are in a global layout or some other reason), uses children accumulative heights and the heights of the margins and paddings to set it own height, and sets its dirty bit to false. 
+
+Q: What is the output of Firefox layout?
+A: The output of Firefox layout is a "metrics" object (nsHTMLReflowMetrics) that includes the width and height of the renderer. 
+
+Q: What are some optimizations for layout?
+A: Some optimizations for layout include when a layout is triggered by a "resize" or a change in the renderer position (and not size), the renders sizes are taken from a cache and not recalculated, and in some cases only a sub tree is modified and layout does not start from the root.ting event". This painting event is propagated to the renderer, which paints only the invalidated region. 
+
+Q: What is the purpose of the "metrics" object in HTML reflow? A: The "metrics" object in HTML reflow is an nsHTMLReflowMetrics object which contains the renderer computed height.
+Q: How is the renderer's width calculated? A: The renderer's width is calculated using the container block's width, the renderer's style "width" property, the margins and borders.
+Q: What is the availableWidth calculated as? A: The availableWidth is calculated as clientWidth() - paddingLeft() - paddingRight().
+Q: What is the minimum and maximum widths calculated as? A: The minimum and maximum widths are calculated as the smallest unbreakable unit and the maximum width respectively.
+Q: What is incremental painting? A: Incremental painting is when some of the renderers change in a way that does not affect the entire tree, causing the OS to see it as a "dirty region" and generate a "painting event" which is propagated to the renderer, which paints only the invalidated region.yrthing happens in it, from parsing the HTML, to layout and painting. The engine will try to keep the user interface responsive by yielding to the browser.
+
+Q: What does the OS do cleverly when dealing with events?
+A: The OS cleverly coalesces several regions into one. 
+
+Q: What is the order of painting elements in CSS2?
+A: The order of painting elements in CSS2 is the order in which the elements are stacked in the stacking contexts, which affects painting since the stacks are painted from back to front. 
+
+Q: What is the display list in Firefox?
+A: The display list in Firefox is a list containing the renderers relevant for the rectangular, in the right painting order (backgrounds of the renderers, then borders etc). 
+
+Q: What does Webkit do before repainting?
+A: Before repainting, Webkit saves the old rectangle as a bitmap. It then paints only the delta between the new and old rectangles. 
+
+Q: What happens when increasing font size of the "html" element?
+A: Increasing font size of the "html" element will cause invalidation of caches, relyout and repaint of the entire tree. the document tree. 
+Q: What is the main thread of the browser?
+A: In Firefox and Safari, the main thread of the browser is the main thread of the browser, while in Chrome it is the tab process main thread.
+
+Q: What is the event loop in the browser main thread?
+A: The event loop in the browser main thread is an infinite loop that keeps the process alive. It waits for events (like layout and paint events) and processes them.
+
+Q: What is the canvas according to CSS2 specification?
+A: According to CSS2 specification, the term canvas describes "the space where the formatting structure is rendered" - where the browser paints the content. The canvas is infinite for each dimension of the space but browsers choose an initial width based on the dimensions of the viewport.
+
+Q: What is the CSS box model?
+A: The CSS box model describes the rectangular boxes that are generated for elements in the document tree and laid out according to the visual formatting model. Each box has a content area (e.g., text, an image, etc.) and optional surrounding padding, border, and margin areas.
+
+Q: What is the positioning scheme according to CSS2?
+A: According to CSS2, the positioning scheme is Normal - the object is positioned according to its place in the document - this means its place in the render tree is like its place in the document tree. the normal flow. The position is set with the "top","bottom","left","right" properties. 
+
+Q: What is the DOM tree? 
+A: The Document Object Model (DOM) is an application programming interface (API) that treats an HTML, XHTML, or XML document as a tree structure wherein each node is an object representing a part of the document.
+
+Q: What is the difference between static positioning and relative positioning?
+A: In static positioning, no position is defined and the default positioning is used. Relative positioning is when an element is positioned like normal and then moved by a specified delta.
+
+Q: What is a block box?
+A: A block box is an element that forms a block and has its own rectangle on the browser window.
+
+Q: What is a float box?
+A: A float box is an element that is shifted to the left or right of a line and causes the other boxes to flow around it.
+
+Q: What is the difference between absolute and fixed positioning?
+A: Absolute positioning is when the layout of an element is defined exactly regardless of the normal flow and does not participate in the normal flow. Fixed positioning is similar to absolute positioning, except the element is fixed in relation to the browser window, not the containing element./projects/layout/. 
+
+Q: What is the third dimension of a box?
+A: The third dimension of a box is represented by the z-index CSS property.
+
+Q: What is a stacking context?
+A: A stacking context is a group of elements that are divided according to the z-index property. The back elements are painted first and the forward elements are closer to the user.
+
+Q: What is an example of absolute positioning?
+A: An example of absolute positioning is <STYLE type="text/css"> div { position: absolute left: 2in top: 2in } </STYLE>.
+
+Q: What is the difference between fixed and relative positioning?
+A: The difference between fixed and relative positioning is that in fixed the container is the view port, while in relative the dimensions are relative to the container.
+
+Q: What is the purpose of the browser architecture?
+A: The purpose of the browser architecture is to define the structure, components, and interactions of a web browser in order to provide a consistent and reliable browsing experience.

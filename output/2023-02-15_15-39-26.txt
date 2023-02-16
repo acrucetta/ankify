@@ -1,0 +1,46 @@
+oroughly research each answer before using it in the card.
+
+Q: What is GPT3?;
+A: GPT3 (Generative Pre-trained Transformer 3) is a massive language model developed by OpenAI that is capable of generating human-like text. It is trained on a dataset of 300 billion tokens of text, estimated to cost 355 GPU years and $4.6m. GPT3 is not yet reliable enough for businesses to use in front of customers, but is showing sparks of cleverness that may accelerate automation and intelligent computer systems. ;
+
+Q: How is GPT3 trained?;
+A: GPT3 is trained by exposing it to lots of text. This process is known as training, and involves presenting the model with examples and asking it to predict the next word. If the prediction is wrong, the error is calculated and the model is updated so that it can make better predictions. This process is repeated millions of times. ;
+
+Q: What are training examples for GPT3?;
+A: Training examples for GPT3 are generated from a sentence by sliding a window across all the text and making lots of examples. For example, these are three training examples generated from the one sentence at the top. ;
+
+Q: How does GPT3 generate output?;
+A: GPT3 generates output one token at a time, usually a word. It is presented with an example and asked to predict the next word. The prediction is then used to calculate the error and update the model to make better predictions. ;
+
+Q: What is GPT3 used for?;
+A: GPT3 is mainly used to generate human-like text. It is not yet reliable enough for businesses to use in front of customers, but is showing sparks of cleverness that may accelerate automation and intelligent computer systems., and the model continues to produce output.
+
+Q: What is GPT-3?; 
+A: GPT-3 is a transformer decoder model based on the paper https://arxiv.org/pdf/1801.10198.pdf. It encodes what it learns from training in 175 billion numbers (called parameters) and is 2048 tokens wide. 
+
+Q: What are the parameters used for?; 
+A: The parameters are used to calculate which token to generate at each run. The untrained model starts with random parameters and training finds values that lead to better predictions. 
+
+Q: What is the “depth” in “deep learning”?; 
+A: The “depth” in “deep learning” refers to the number of layers in the model. GPT3 has 96 transformer decoder layers, each with its own 1.8B parameter to make its calculations. 
+
+Q: What is the process of prediction in GPT-3?; 
+A: The process of prediction in GPT-3 is mostly a lot of matrix multiplication. It involves converting the word to a vector (list of numbers) representing the word, computing the prediction, and then converting the resulting vector to a word. 
+
+Q: What is the difference between GPT-2 and GPT-3?; 
+A: The difference between GPT-2 and GPT-3 is the alternating dense and sparse self-attention layers. GPT-3 has this feature which GPT-2 does not.)},i[r].l=1*new Date();a=s.createElement(o),  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');  ga('create', 'UA-61188897-1', 'auto');  ga('send', 'pageview');
+
+Q: What is the input to the React code generation example?;
+A: The input to the React code generation example is the description, which is the input prompt (in green), in addition to a couple of examples of description=>code. ;
+
+Q: How is the React code generated?;
+A: The React code is generated like the pink tokens, token after token. The priming examples and the description are appended as input, with specific tokens separating examples and the results, and then fed into the model. ;
+
+Q: What is fine-tuning?;
+A: Fine-tuning is a process that updates the model's weights to make the model better at a certain task. ;
+
+Q: What is the potential of GPT-3?;
+A: The potential of GPT-3 is amazing, as it can be used to generate more accurate results with fine-tuning. ;
+
+Q: What is the license of this work?;
+A: This work is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.

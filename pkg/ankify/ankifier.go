@@ -3,15 +3,12 @@ package ankify
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"os"
 	"strings"
 
 	"log"
-
-	"github.com/joho/godotenv"
 )
 
 type OpenAIResponse struct {
@@ -37,20 +34,9 @@ type AnkiQuestion struct {
 }
 
 const API_URL = "https://api.openai.com/v1/completions"
-const ANKI_TEXT = `Make 5 Anki cards for the following text, give it to me in the following 
-				format: Q: A: 
+const PROMPT_HELPER = `Make 5 Anki cards for the following text, give it to me in the following format: Q: [Insert question here] A: [Insert answer here] \n\n The text is the following: {text}`
 
-				Divide each card with a new line and a ";" at the end of each question and answer. Add 
-				more context to each question by searching the web for the answer.`
-
-func GetAnkiCards(anki_text string) (string, error) {
-
-	// Load the .env file
-	err := godotenv.Load(".env")
-	if err != nil {
-		log.Fatal(err)
-		return "", err
-	}
+func GetAnkiCards(raw_text string) (string, error) {
 
 	// Create a new HTTP client
 	client := &http.Client{}
@@ -66,9 +52,11 @@ func GetAnkiCards(anki_text string) (string, error) {
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Authorization", "Bearer "+API_KEY)
 
+	prompt := strings.Replace(PROMPT_HELPER, "{text}", raw_text, 1)
+
 	json_request := OpenAIRequest{
 		Model:       "text-davinci-003",
-		Prompt:      ANKI_TEXT + anki_text,
+		Prompt:      prompt,
 		MaxTokens:   2048,
 		Temperature: 0.5,
 	}
@@ -104,7 +92,7 @@ func GetAnkiCards(anki_text string) (string, error) {
 
 	// Check if the response is valid
 	if len(response.Choices) == 0 {
-		fmt.Println("No response from OpenAI")
+		log.Fatal("No response from OpenAI")
 		return "", err
 	}
 	return response.Choices[0].Text, nil
@@ -125,13 +113,23 @@ func ParseAnkiText(anki_text string) (AnkiQuestions, error) {
 	// Split the text based on "line breaks"
 	anki_cards := AnkiQuestions{}
 
-	// Split the text based on "line breaks"
-	anki_cards_split := strings.Split(anki_text, ";")
+	// Split the text based on "\n\n")
+	anki_cards_split := strings.Split(anki_text, "\n\n")
 
 	// Loop through the split text and create a new AnkiQuestion for each card
 	for _, card := range anki_cards_split {
+
+		if card == "" {
+			continue
+		}
+
+		// If the card doesn't contain "Q: " or "A: ", skip it
+		if !strings.Contains(card, "Q: ") || !strings.Contains(card, "A: ") {
+			continue
+		}
+
 		// Split the card based on "Q: " and "A: "
-		card_split := strings.Split(card, "A: ")
+		card_split := strings.Split(card, "A:")
 
 		card_split[0] = strings.TrimPrefix(card_split[0], "Q: ")
 		card_split[0] = strings.TrimSpace(card_split[0])
@@ -148,9 +146,9 @@ func ParseAnkiText(anki_text string) (AnkiQuestions, error) {
 	return anki_cards, nil
 }
 
-func Ankify(anki_text map[int]string) (string, error) {
+func Ankify(anki_text map[int]string) (AnkiQuestions, error) {
 
-	anki_questions := ""
+	anki_questions := AnkiQuestions{}
 	for _, text := range anki_text {
 
 		// Check the number of tokens in the text
@@ -172,8 +170,7 @@ func Ankify(anki_text map[int]string) (string, error) {
 		} else {
 			requests = append(requests, text)
 		}
-		log.Printf(`Splitting request into %d parts, the max number of words per request is 2048. 
-		The document has %d`, num_splits, len(text))
+		log.Printf(`Splitting request into %d parts, the max number of words per request is 2048. The document has %d words.`, num_splits, len(text))
 
 		// Loop through the requests and get the Anki cards
 		// for each request
@@ -181,18 +178,18 @@ func Ankify(anki_text map[int]string) (string, error) {
 			anki_response, err := GetAnkiCards(request)
 			if err != nil {
 				log.Fatal(err)
-				return "", err
+				return AnkiQuestions{}, err
 			}
 			// Log the request number using logger
 			log.Printf("Finished processing request %d of %d.", i+1, len(requests))
-			anki_questions += clean_questions(anki_response)
+			parsed_questions, err := ParseAnkiText(anki_response)
+
+			if err != nil {
+				log.Fatal(err)
+				return AnkiQuestions{}, err
+			}
+			anki_questions.Questions = append(anki_questions.Questions, parsed_questions.Questions...)
 		}
 	}
 	return anki_questions, nil
-}
-
-// Remove the ";" at the end of each question and answer
-func clean_questions(anki_questions string) string {
-	anki_questions = strings.ReplaceAll(anki_questions, ";", "")
-	return anki_questions
 }
