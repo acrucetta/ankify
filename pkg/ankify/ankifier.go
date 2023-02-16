@@ -35,8 +35,8 @@ type AnkiQuestion struct {
 }
 
 const API_URL = "https://api.openai.com/v1/completions"
-const QUESTION_HELPER = `Make {card_num} Anki cards for the following text, give it to me in the following format: Q: [Insert question here] A: [Insert answer here] \n\n The text is the following: {text}`
-const SUMMARY_HELPER = `Summarize the following text into less than 150 words; keep the technical details: {text}`
+const QUESTION_HELPER = `Make {card_num} Anki cards for the following text, give it to me in the following format: Q: [Insert question here] A: [Insert answer here] \n\n The text is the following, be detailed, explain it to me like an expert: {text}`
+const SUMMARY_HELPER = `Summarize the following text into less than 150 words in detail, explain it to me like an expert: {text}`
 
 func CallOpenAI(prompt string) (string, error) {
 
@@ -175,22 +175,28 @@ func Ankify(anki_text map[int]string) (AnkiQuestions, error) {
 		// Loop through the requests and summarize each request
 		// using OpenAI
 		var requests_summaries string = ""
-		for i, request := range requests {
-			// Create the prompt for OpenAI
-			summary_prompt := strings.Replace(SUMMARY_HELPER, "{text}", request, 1)
-			anki_response, err := CallOpenAI(summary_prompt)
-			if err != nil {
-				log.Fatal(err)
-				return AnkiQuestions{}, err
+
+		// If there is only one request, we don't need to summarize it
+		if len(requests) > 1 {
+			for i, request := range requests {
+				// Create the prompt for OpenAI
+				summary_prompt := strings.Replace(SUMMARY_HELPER, "{text}", request, 1)
+				anki_response, err := CallOpenAI(summary_prompt)
+				if err != nil {
+					log.Fatal(err)
+					return AnkiQuestions{}, err
+				}
+				// Log the request number using logger
+				log.Printf("Finished processing request %d of %d.", i+1, len(requests))
+				requests_summaries += anki_response
 			}
-			// Log the request number using logger
-			log.Printf("Finished processing request %d of %d.", i+1, len(requests))
-			requests_summaries += anki_response
+		} else {
+			requests_summaries = requests[0]
 		}
 
 		// Call the OpenAI API to create the anki cards from the summary
 		anki_prompt := strings.Replace(QUESTION_HELPER, "{text}", requests_summaries, 1)
-		anki_prompt = strings.Replace(anki_prompt, "{num_questions}", strconv.Itoa(7), 1)
+		anki_prompt = strings.Replace(anki_prompt, "{card_num}", strconv.Itoa(5), 1)
 		anki_response, err := CallOpenAI(anki_prompt)
 		if err != nil {
 			log.Fatal(err)
