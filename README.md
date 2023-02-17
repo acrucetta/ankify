@@ -1,6 +1,6 @@
 # Ankify
 
-Ankify is a command line tool written in Golang that reads a PDF, TXT, or an URL and outputs Anki questions for the user. The project uses Cobra CLI to provide a user-friendly interface for creating flashcards from your favorite PDFs.
+Ankify is a command line tool written in Golang that reads a PDF, TXT, or an URL and outputs Anki questions for the user. The project uses Cobra CLI to provide a user-friendly interface for creating flashcards from your favorite information sources.
 
 ## Installation
 
@@ -23,6 +23,7 @@ Flags:
   -h, --help          help for ankify
   -p, --pages ints    Page numbers to parse, e.g., '1,2,3' (default is 1)
   -t, --type string   Type of file to parse, either 'txt', 'pdf', or 'url'
+  -T, --tags strings  Tags to add to the Anki questions, e.g., 'articles'
 ```
 
 Ankify can be run from the command line with the following command:
@@ -85,7 +86,3 @@ A: The two functions of MapReduce are a map function that processes a key/value 
 Q: What is the purpose of the run-time system in MapReduce?; 
 A: The purpose of the run-time system in MapReduce is to take care of the details of partitioning the input data, scheduling the program’s execution across a set of machines, handling machine failures, and managing the required inter-machine communication.
 ```
-
-## Note
-
-It is important to provide a valid PDF file as input to Ankify. The tool does not currently handle invalid or corrupted PDF files.
