@@ -147,7 +147,7 @@ func ParseAnkiText(anki_text string) (AnkiQuestions, error) {
 	return anki_cards, nil
 }
 
-func Ankify(anki_text map[int]string) (AnkiQuestions, error) {
+func Ankify(anki_text map[int]string, card_num int) (AnkiQuestions, error) {
 
 	anki_questions := AnkiQuestions{}
 	for _, text := range anki_text {
@@ -197,7 +197,7 @@ func Ankify(anki_text map[int]string) (AnkiQuestions, error) {
 
 		// Call the OpenAI API to create the anki cards from the summary
 		anki_prompt := strings.Replace(QUESTION_HELPER, "{text}", requests_summaries, 1)
-		anki_prompt = strings.Replace(anki_prompt, "{card_num}", strconv.Itoa(5), 1)
+		anki_prompt = strings.Replace(anki_prompt, "{card_num}", strconv.Itoa(card_num), 1)
 		anki_response, err := CallOpenAI(anki_prompt)
 		if err != nil {
 			log.Fatal(err)

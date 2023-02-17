@@ -19,7 +19,8 @@ var AnkifyCmd = &cobra.Command{
 	Long: `Parses a PDF and generates Anki cards, which are then printed to the console and saved as a JSON file in your output folder. 
 	You may use the flag "type" or "t" to specify the input file type.
 	You may use the flag "page" or "p" to specify the page numbers to parse.
-	You may use the flag "tag" or "T" to specify the tags to add to the cards.`,
+	You may use the flag "tag" or "T" to specify the tags to add to the cards.
+	You may use the flag "cards" or "c" to specify the number of cards to generate per page.`,
 	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 
@@ -27,6 +28,9 @@ var AnkifyCmd = &cobra.Command{
 
 		var page_numbers []int
 		page_numbers, _ = cmd.Flags().GetIntSlice("page")
+
+		var card_num int
+		card_num, _ = cmd.Flags().GetInt("cards")
 
 		var tag string = ""
 		tag, _ = cmd.Flags().GetString("tag")
@@ -49,7 +53,7 @@ var AnkifyCmd = &cobra.Command{
 			res, _ = docparser.ParsePdf(args[0], page_numbers)
 		}
 
-		anki_cards, _ := ankify.Ankify(res)
+		anki_cards, _ := ankify.Ankify(res, card_num)
 
 		// Save string as txt using os package
 		// Create file name based on date and time
@@ -86,7 +90,9 @@ var AnkifyCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(AnkifyCmd)
+	var card_num int
 	AnkifyCmd.Flags().StringP("type", "t", "", "Type of file to parse, either 'txt', 'pdf', or 'url' (default is 'txt')")
 	AnkifyCmd.Flags().IntSliceP("pages", "p", []int{}, "Page numbers to parse, e.g., '1,2,3' (default is 1)")
 	AnkifyCmd.Flags().StringP("tag", "T", "", "Tags to add to the cards, e.g., 'tag1' (default is no tags)")
+	AnkifyCmd.Flags().IntVarP(&card_num, "cards", "c", 1, "Number of cards to generate per page (default is 1)")
 }
