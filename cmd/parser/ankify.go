@@ -74,9 +74,6 @@ var AnkifyCmd = &cobra.Command{
 		// Create a new CSV writer
 		writer := csv.NewWriter(file)
 
-		// Write the header row
-		writer.Write([]string{"question", "answer", "tag"})
-
 		// Write the data rows based on the AnkiQuestion struct
 		for _, card := range anki_cards.Questions {
 			writer.Write([]string{card.Question, card.Answer, tag})
