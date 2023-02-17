@@ -32,6 +32,7 @@ type AnkiQuestions struct {
 type AnkiQuestion struct {
 	Question string
 	Answer   string
+	Tag      string
 }
 
 const API_URL = "https://api.openai.com/v1/completions"
