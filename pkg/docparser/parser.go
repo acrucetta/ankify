@@ -10,7 +10,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/PuerkitoBio/goquery"
+	"golang.org/x/net/html"
 )
 
 func ParseTxt(txt_path string) (map[int]string, error) {
@@ -116,29 +116,46 @@ func ParsePdf(pdf_path string, pages []int) (map[int]string, error) {
 }
 
 func getBodyTextFromURL(url string) (string, error) {
+	// Fetch the HTML document from the URL.
 	resp, err := http.Get(url)
 	if err != nil {
-		return "", err
+		panic(err)
 	}
 	defer resp.Body.Close()
 
-	doc, err := goquery.NewDocumentFromReader(resp.Body)
+	// Parse the HTML document.
+	doc, err := html.Parse(resp.Body)
 	if err != nil {
-		return "", err
+		panic(err)
 	}
 
-	var bodyText string = doc.Find("body").Text()
+	// Extract the text from the content elements in the HTML document.
+	var text string
+	var extractText func(*html.Node)
+	extractText = func(n *html.Node) {
+		if n.Type == html.ElementNode {
+			switch n.Data {
+			case "p", "h1", "h2", "h3", "h4", "h5", "h6", "li", "em", "ul":
+				text += " " + extractNodeText(n)
+			}
+		}
+		for c := n.FirstChild; c != nil; c = c.NextSibling {
+			extractText(c)
+		}
+	}
+	extractText(doc)
 
-	// Remove newlines and tabs
-	bodyText = strings.ReplaceAll(bodyText, "\n", " ")
-	bodyText = strings.ReplaceAll(bodyText, "\t", " ")
-	bodyText = strings.ReplaceAll(bodyText, "\r", " ")
+	// Print the extracted text.
+	fmt.Println(text)
+	return text, nil
+}
 
-	// Remove multiple spaces
-	bodyText = strings.ReplaceAll(bodyText, "  ", " ")
-
-	// Remove whitespace at the beginning and end of the string
-	bodyText = strings.TrimSpace(bodyText)
-
-	return bodyText, nil
+func extractNodeText(n *html.Node) string {
+	var text string
+	for c := n.FirstChild; c != nil; c = c.NextSibling {
+		if c.Type == html.TextNode {
+			text += c.Data
+		}
+	}
+	return text
 }

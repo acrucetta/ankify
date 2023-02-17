@@ -47,7 +47,7 @@ func TestParsePdf(t *testing.T) {
 func TestParseUrl(t *testing.T) {
 
 	// Arrange
-	const url string = "https://jalammar.github.io/how-gpt3-works-visualizations-animations/"
+	const url string = "https://hagakure.substack.com/p/twh45-against-overwhelm"
 
 	// Act
 	res, err := ParseUrl(url)
@@ -59,6 +59,25 @@ func TestParseUrl(t *testing.T) {
 	if res == nil {
 		t.Error("Expected a non-empty string")
 	}
-
 	fmt.Println(res)
+	fmt.Print(len(res[1]))
+}
+
+func TestParseUrlv2(t *testing.T) {
+
+	// Arrange
+	const url string = "https://hagakure.substack.com/p/twh45-against-overwhelm"
+
+	// Act
+	res, err := getBodyTextFromURLTest(url)
+
+	// Assert
+	if err != nil {
+		t.Error(err)
+	}
+	if res == "" {
+		t.Error("Expected a non-empty string")
+	}
+	fmt.Println(res)
+	fmt.Print(len(res))
 }
