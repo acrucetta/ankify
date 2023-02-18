@@ -18,7 +18,7 @@ func TestAnkify(t *testing.T) {
 	godotenv.Load("../../.env")
 
 	// Act
-	res, err := Ankify(anki_text_map)
+	res, err := Ankify(anki_text_map, 10)
 
 	// Assert
 	if err != nil {
@@ -61,7 +61,7 @@ func TestAnkifyUrl(t *testing.T) {
 
 	// Act
 	url_body, _ := docparser.ParseUrl(url)
-	res, err := Ankify(url_body)
+	res, err := Ankify(url_body, 10)
 
 	// Assert
 	if err != nil {

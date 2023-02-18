@@ -69,7 +69,7 @@ func TestParseUrlv2(t *testing.T) {
 	const url string = "https://hagakure.substack.com/p/twh45-against-overwhelm"
 
 	// Act
-	res, err := getBodyTextFromURLTest(url)
+	res, err := getBodyTextFromURL(url)
 
 	// Assert
 	if err != nil {
