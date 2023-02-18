@@ -145,8 +145,6 @@ func getBodyTextFromURL(url string) (string, error) {
 	}
 	extractText(doc)
 
-	// Print the extracted text.
-	fmt.Println(text)
 	return text, nil
 }
 

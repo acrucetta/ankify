@@ -179,7 +179,7 @@ func Ankify(anki_text map[int]string, card_num int) (AnkiQuestions, error) {
 		var requests_summaries string = ""
 
 		if len(requests) > 1 {
-			var summary_size int = 2000 / num_splits
+			var summary_size int = 2048 / num_splits
 			log.Println("Each summary will be approximately", summary_size, "words.")
 			for i, request := range requests {
 
