@@ -161,7 +161,7 @@ func Ankify(anki_text map[int]string, card_num int) (AnkiQuestions, error) {
 		var token_size int = GetTokenSize(text)
 		const MAX_TOKENS = 2048
 
-		if len(text) > MAX_TOKENS {
+		if token_size > MAX_TOKENS {
 			num_splits = token_size / MAX_TOKENS
 			for i := 0; i < num_splits; i++ {
 				// Get the start and end index of the text
@@ -225,5 +225,8 @@ func Ankify(anki_text map[int]string, card_num int) (AnkiQuestions, error) {
 }
 
 func GetTokenSize(text string) int {
-	return len(strings.Split(text, " "))
+	// We assume a token is about 4 characters
+	// and we count the number of spaces
+	// to get the number of tokens
+	return len(text) / 4
 }
