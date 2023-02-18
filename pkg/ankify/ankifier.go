@@ -202,6 +202,10 @@ func Ankify(anki_text map[int]string, card_num int) (AnkiQuestions, error) {
 		// Call the OpenAI API to create the anki cards from the summary
 		anki_token_size := GetTokenSize(requests_summaries)
 		log.Printf("The summary has %d words.", anki_token_size)
+		if anki_token_size > 2048 {
+			log.Fatal("The summary is too long, we will use only the first 2000 words.")
+			requests_summaries = requests_summaries[:2000]
+		}
 		anki_prompt := strings.Replace(QUESTION_HELPER, "{text}", requests_summaries, 1)
 		anki_prompt = strings.Replace(anki_prompt, "{card_num}", strconv.Itoa(card_num), 1)
 		anki_response, err := CallOpenAI(anki_prompt)
@@ -214,6 +218,7 @@ func Ankify(anki_text map[int]string, card_num int) (AnkiQuestions, error) {
 			log.Fatal(err)
 			return AnkiQuestions{}, err
 		}
+		log.Println("Successfully parsed the anki cards, adding them to the CSV.")
 		anki_questions.Questions = append(anki_questions.Questions, parsed_questions.Questions...)
 	}
 	return anki_questions, nil
