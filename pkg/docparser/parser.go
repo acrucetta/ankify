@@ -135,7 +135,7 @@ func getBodyTextFromURL(url string) (string, error) {
 	extractText = func(n *html.Node) {
 		if n.Type == html.ElementNode {
 			switch n.Data {
-			case "p", "h1", "h2", "h3", "h4", "h5", "h6", "li", "em", "ul":
+			case "p", "h1", "h2", "h3", "h4", "h5", "h6", "li", "em", "ul", "ol", "pre":
 				text += " " + extractNodeText(n)
 			}
 		}
