@@ -36,8 +36,8 @@ type AnkiQuestion struct {
 }
 
 const API_URL = "https://api.openai.com/v1/completions"
-const QUESTION_HELPER = `Make {card_num} Anki cards for the following text, give it to me in the following format: Q: [Insert question here] A: [Insert answer here] \n\n The text is the following, be detailed, explain it to me like an expert: {text}`
-const SUMMARY_HELPER = `Summarize the following text into less than {summary_size} words in detail, explain it to me like an expert: {text}`
+const QUESTION_HELPER = `Make {card_num} Anki cards for the following text, give it to me in the following format: Q: [Insert question here] A: [Insert answer here] \n\n The text is the following, be detailed and include the most unique and helpful points: {text}`
+const SUMMARY_HELPER = `Summarize the following text into less than {summary_size} words in detail with the most unique and helpful points, explain it to me like an expert: {text}`
 
 func CallOpenAI(prompt string) (string, error) {
 
