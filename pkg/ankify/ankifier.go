@@ -147,81 +147,95 @@ func ParseAnkiText(anki_text string) (AnkiQuestions, error) {
 	return anki_cards, nil
 }
 
-func Ankify(anki_text map[int]string, card_num int) (AnkiQuestions, error) {
+func SplitTextIntoRequests(text string, max_tokens int) []string {
+	var requests []string
+	var num_of_splits int = 1
+	var input_token_size int = GetTokenSize(text)
 
-	anki_questions := AnkiQuestions{}
-	for _, text := range anki_text {
+	if input_token_size > max_tokens {
+		num_of_splits = (input_token_size / max_tokens) + 1
+		for i := 0; i < num_of_splits; i++ {
+			startIndex := i * max_tokens
+			endIndex := (i + 1) * max_tokens
+			requests = append(requests, text[startIndex:endIndex])
+		}
+	} else {
+		requests = append(requests, text)
+	}
+	log.Printf(`Splitting request into %d parts, the max number of words per request is %d. The document has %d words.`, num_of_splits, max_tokens, input_token_size)
+	return requests
+}
 
+func SummarizeRequests(requests []string, summarySize int) (string, error) {
+	var requestsSummaries string = ""
+	if len(requests) > 1 {
+		log.Println("Each summary will be approximately", summarySize, "words.")
+		for i, request := range requests {
+			// Create the prompt for OpenAI
+			summaryPrompt := strings.Replace(SUMMARY_HELPER, "{text}", request, 1)
+			summaryPrompt = strings.Replace(summaryPrompt, "{summary_size}", strconv.Itoa(summarySize), 1)
+			ankiResponse, err := CallOpenAI(summaryPrompt)
+			if err != nil {
+				return "", err
+			}
+			// Log the request number using logger
+			log.Printf("Finished processing request %d of %d.", i+1, len(requests))
+			requestsSummaries += ankiResponse
+		}
+	} else {
+		requestsSummaries = requests[0]
+	}
+	return requestsSummaries, nil
+}
+
+func CreateAnkiCards(text string, cardNum int) (AnkiQuestions, error) {
+	ankiQuestions := AnkiQuestions{}
+	anki_token_size := GetTokenSize(text)
+	log.Printf("The summary has %d tokens.", anki_token_size)
+	if anki_token_size > 2048 {
+		log.Fatal("The summary is too long, we will use only the first 2000 words.")
+		text = text[:2000]
+	}
+	ankiPrompt := strings.Replace(QUESTION_HELPER, "{text}", text, 1)
+	ankiPrompt = strings.Replace(ankiPrompt, "{card_num}", strconv.Itoa(cardNum), 1)
+	ankiResponse, err := CallOpenAI(ankiPrompt)
+	if err != nil {
+		return AnkiQuestions{}, err
+	}
+	parsedQuestions, err := ParseAnkiText(ankiResponse)
+	if err != nil {
+		return AnkiQuestions{}, err
+	}
+	log.Println("Successfully parsed the anki cards, adding them to the CSV.")
+	ankiQuestions.Questions = append(ankiQuestions.Questions, parsedQuestions.Questions...)
+	return ankiQuestions, nil
+}
+
+func Ankify(ankiText map[int]string, cardNum int) (AnkiQuestions, error) {
+	ankiQuestions := AnkiQuestions{}
+	const max_tokens int = 2048
+	for _, text := range ankiText {
 		// Check the number of tokens in the text
 		// doesn't exceed the maximum number of tokens
 		// allowed by OpenAI (3800); if it does, split
 		// the text into multiple requests
-		var requests []string
-		var num_splits int = 1
-		var token_size int = GetTokenSize(text)
-		const MAX_TOKENS = 2048
-
-		if token_size > MAX_TOKENS {
-			num_splits = token_size / MAX_TOKENS
-			for i := 0; i < num_splits; i++ {
-				// Get the start and end index of the text
-				start_index := i * MAX_TOKENS
-				end_index := (i + 1) * MAX_TOKENS
-				requests = append(requests, text[start_index:end_index])
-			}
-		} else {
-			requests = append(requests, text)
-		}
-		log.Printf(`Splitting request into %d parts, the max number of words per request is 2048. The document has %d words.`, num_splits, token_size)
-
-		// Loop through the requests and summarize each request
-		// using OpenAI
-		var requests_summaries string = ""
-
-		if len(requests) > 1 {
-			var summary_size int = 2048 / num_splits
-			log.Println("Each summary will be approximately", summary_size, "words.")
-			for i, request := range requests {
-
-				// Create the prompt for OpenAI
-				summary_prompt := strings.Replace(SUMMARY_HELPER, "{text}", request, 1)
-				summary_prompt = strings.Replace(summary_prompt, "{summary_size}", strconv.Itoa(summary_size), 1)
-				anki_response, err := CallOpenAI(summary_prompt)
-				if err != nil {
-					log.Fatal(err)
-					return AnkiQuestions{}, err
-				}
-				// Log the request number using logger
-				log.Printf("Finished processing request %d of %d.", i+1, len(requests))
-				requests_summaries += anki_response
-			}
-		} else {
-			requests_summaries = requests[0]
-		}
-
-		// Call the OpenAI API to create the anki cards from the summary
-		anki_token_size := GetTokenSize(requests_summaries)
-		log.Printf("The summary has %d words.", anki_token_size)
-		if anki_token_size > 2048 {
-			log.Fatal("The summary is too long, we will use only the first 2000 words.")
-			requests_summaries = requests_summaries[:2000]
-		}
-		anki_prompt := strings.Replace(QUESTION_HELPER, "{text}", requests_summaries, 1)
-		anki_prompt = strings.Replace(anki_prompt, "{card_num}", strconv.Itoa(card_num), 1)
-		anki_response, err := CallOpenAI(anki_prompt)
+		requests := SplitTextIntoRequests(text, max_tokens)
+		var summary_size int = max_tokens / len(requests)
+		summarized_text, err := SummarizeRequests(requests, summary_size)
 		if err != nil {
 			log.Fatal(err)
 			return AnkiQuestions{}, err
 		}
-		parsed_questions, err := ParseAnkiText(anki_response)
+
+		// Create the anki cards from the summary
+		ankiQuestionsForText, err := CreateAnkiCards(summarized_text, cardNum)
 		if err != nil {
 			log.Fatal(err)
 			return AnkiQuestions{}, err
 		}
-		log.Println("Successfully parsed the anki cards, adding them to the CSV.")
-		anki_questions.Questions = append(anki_questions.Questions, parsed_questions.Questions...)
+		ankiQuestions.Questions = append(ankiQuestions.Questions, ankiQuestionsForText.Questions...)
 	}
-	return anki_questions, nil
+	return ankiQuestions, nil
 }
 
 func GetTokenSize(text string) int {

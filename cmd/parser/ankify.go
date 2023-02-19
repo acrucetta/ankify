@@ -25,32 +25,25 @@ var AnkifyCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 
 		file_type, _ := cmd.Flags().GetString("type")
+		page_numbers, _ := cmd.Flags().GetIntSlice("page")
+		card_num, _ := cmd.Flags().GetInt("cards")
+		tag, _ := cmd.Flags().GetString("tag")
 
-		var page_numbers []int
-		page_numbers, _ = cmd.Flags().GetIntSlice("page")
-
-		var card_num int
-		card_num, _ = cmd.Flags().GetInt("cards")
-
-		var tag string = ""
-		tag, _ = cmd.Flags().GetString("tag")
-
-		if len(page_numbers) == 0 {
-			page_numbers = []int{1}
+		var err error
+		var res map[int]string
+		switch file_type {
+		case "txt":
+			res, err = docparser.ParseTxt(args[0])
+		case "pdf":
+			res, err = docparser.ParsePdf(args[0], page_numbers)
+		case "url":
+			res, err = docparser.ParseUrl(args[0])
+		default:
+			fmt.Println("Flag 'type' must be either 'txt' or 'pdf, defaulting to 'txt'")
 		}
 
-		var res map[int]string
-		var err error
-
-		if file_type == "txt" {
-			res, _ = docparser.ParseTxt(args[0])
-		} else if file_type == "pdf" {
-			res, _ = docparser.ParsePdf(args[0], page_numbers)
-		} else if file_type == "url" {
-			res, _ = docparser.ParseUrl(args[0])
-		} else {
-			fmt.Println("Flag 'type' must be either 'txt' or 'pdf, defaulting to 'txt'")
-			res, _ = docparser.ParsePdf(args[0], page_numbers)
+		if err != nil {
+			log.Fatal(err)
 		}
 
 		anki_cards, _ := ankify.Ankify(res, card_num)
@@ -91,8 +84,8 @@ var AnkifyCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(AnkifyCmd)
 	var card_num int
-	AnkifyCmd.Flags().StringP("type", "t", "", "Type of file to parse, either 'txt', 'pdf', or 'url' (default is 'txt')")
-	AnkifyCmd.Flags().IntSliceP("pages", "p", []int{}, "Page numbers to parse, e.g., '1,2,3' (default is 1)")
+	AnkifyCmd.Flags().StringP("type", "t", "txt", "Type of file to parse, either 'txt', 'pdf', or 'url' (default is 'txt')")
+	AnkifyCmd.Flags().IntSliceP("pages", "p", []int{1}, "Page numbers to parse, e.g., '1,2,3' (default is 1)")
 	AnkifyCmd.Flags().StringP("tag", "T", "", "Tags to add to the cards, e.g., 'tag1' (default is no tags)")
-	AnkifyCmd.Flags().IntVarP(&card_num, "cards", "c", 1, "Number of cards to generate per page (default is 1)")
+	AnkifyCmd.Flags().IntVarP(&card_num, "cards", "c", 5, "Number of cards to generate per page (default is 1)")
 }
