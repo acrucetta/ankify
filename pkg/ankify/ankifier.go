@@ -193,8 +193,8 @@ func CreateAnkiCards(text string, cardNum int) (AnkiQuestions, error) {
 	anki_token_size := GetTokenSize(text)
 	log.Printf("The summary has %d tokens.", anki_token_size)
 	if anki_token_size > 2048 {
-		log.Fatal("The summary is too long, we will use only the first 2000 words.")
-		text = text[:2000]
+    log.Fatal("The summary is too long, we will use only the first 1800 characters.")
+		text = text[:1800]
 	}
 	ankiPrompt := strings.Replace(QUESTION_HELPER, "{text}", text, 1)
 	ankiPrompt = strings.Replace(ankiPrompt, "{card_num}", strconv.Itoa(cardNum), 1)
