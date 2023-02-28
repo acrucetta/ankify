@@ -36,8 +36,15 @@ type AnkiQuestion struct {
 }
 
 const API_URL = "https://api.openai.com/v1/completions"
-const QUESTION_HELPER = `Make {card_num} Anki cards for the following text, give it to me in the following format: Q: [Insert question here] A: [Insert answer here] \n\n The text is the following, be detailed and include the most unique and helpful points: {text}`
-const SUMMARY_HELPER = `Summarize the following text into less than {summary_size} words in detail with the most unique and helpful points, explain it to me like an expert: {text}`
+const QUESTION_HELPER = `Assume you’re an expert in spaced repetition and learning. You have researched what are the best ways for humans to learn new content. You will help me write Anki cards so that I can learn the content in the text more comprehensively. You will make these cards simple and focused, with clear and concise language, and creating context around each question. I want you to make {card_num} Anki cards for the following text, give it to me in the following format: 
+
+Q: [Insert question here] 
+A: [Insert answer here] 
+\n\n 
+
+The text is the following, be detailed and include the most unique and helpful points: 
+{text}`
+const SUMMARY_HELPER = `Assume you’re an expert in summarizing text to the most important points of paragraph in a way that retains the original meaning and context of the pragraph, I want you to summarize the following text into less than {summary_size} words with the most unique and helpful points: {text}`
 
 func CallOpenAI(prompt string) (string, error) {
 
@@ -188,27 +195,28 @@ func SummarizeRequests(requests []string, summarySize int) (string, error) {
 	return requestsSummaries, nil
 }
 
-func CreateAnkiCards(text string, cardNum int) (AnkiQuestions, error) {
-	ankiQuestions := AnkiQuestions{}
+func CreateAnkiCards(text string, card_num int) (AnkiQuestions, error) {
+	anki_questions := AnkiQuestions{}
 	anki_token_size := GetTokenSize(text)
 	log.Printf("The summary has %d tokens.", anki_token_size)
 	if anki_token_size > 2048 {
-    log.Fatal("The summary is too long, we will use only the first 1800 characters.")
+		log.Fatal("The summary is too long, we will use only the first 1800 characters.")
 		text = text[:1800]
 	}
-	ankiPrompt := strings.Replace(QUESTION_HELPER, "{text}", text, 1)
-	ankiPrompt = strings.Replace(ankiPrompt, "{card_num}", strconv.Itoa(cardNum), 1)
-	ankiResponse, err := CallOpenAI(ankiPrompt)
+	anki_prompt := strings.Replace(QUESTION_HELPER, "{text}", text, 1)
+	anki_prompt = strings.Replace(anki_prompt, "{card_num}", strconv.Itoa(card_num), 1)
+	log.Printf("The final length of the prompt is %d tokens.", GetTokenSize(anki_prompt))
+	anki_response, err := CallOpenAI(anki_prompt)
 	if err != nil {
 		return AnkiQuestions{}, err
 	}
-	parsedQuestions, err := ParseAnkiText(ankiResponse)
+	parsed_questions, err := ParseAnkiText(anki_response)
 	if err != nil {
 		return AnkiQuestions{}, err
 	}
 	log.Println("Successfully parsed the anki cards, adding them to the CSV.")
-	ankiQuestions.Questions = append(ankiQuestions.Questions, parsedQuestions.Questions...)
-	return ankiQuestions, nil
+	anki_questions.Questions = append(anki_questions.Questions, parsed_questions.Questions...)
+	return anki_questions, nil
 }
 
 func Ankify(ankiText map[int]string, cardNum int) (AnkiQuestions, error) {
