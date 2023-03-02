@@ -12,17 +12,40 @@ import (
 	"log"
 )
 
-type OpenAIResponse struct {
-	Choices []struct {
-		Text string `json:"text"`
-	} `json:"choices"`
+type ResponseBody struct {
+	ID      string   `json:"id"`
+	Object  string   `json:"object"`
+	Created int      `json:"created"`
+	Model   string   `json:"model"`
+	Usage   Usage    `json:"usage"`
+	Choices []Choice `json:"choices"`
+}
+
+type Usage struct {
+	PromptTokens     int `json:"prompt_tokens"`
+	CompletionTokens int `json:"completion_tokens"`
+	TotalTokens      int `json:"total_tokens"`
+}
+
+type Choice struct {
+	Message      ResponseMessage `json:"message"`
+	FinishReason string          `json:"finish_reason"`
+	Index        int             `json:"index"`
+}
+
+type ResponseMessage struct {
+	Role    string `json:"role"`
+	Content string `json:"content"`
 }
 
 type OpenAIRequest struct {
-	Model       string  `json:"model"`
-	Prompt      string  `json:"prompt"`
-	MaxTokens   int     `json:"max_tokens"`
-	Temperature float64 `json:"temperature"`
+	Model    string           `json:"model"`
+	Messages []RequestMessage `json:"messages"`
+}
+
+type RequestMessage struct {
+	Role    string `json:"role"`
+	Content string `json:"content"`
 }
 
 type AnkiQuestions struct {
@@ -35,7 +58,7 @@ type AnkiQuestion struct {
 	Tag      string
 }
 
-const API_URL = "https://api.openai.com/v1/completions"
+const API_URL = "https://api.openai.com/v1/chat/completions"
 const QUESTION_HELPER = `Assume you’re an expert in spaced repetition and learning. You have researched what are the best ways for humans to learn new content. You will help me write Anki cards so that I can learn the content in the text more comprehensively. You will make these cards simple and focused, with clear and concise language, and creating context around each question. I want you to make {card_num} Anki cards for the following text, give it to me in the following format: 
 
 Q: [Insert question here] 
@@ -62,11 +85,15 @@ func CallOpenAI(prompt string) (string, error) {
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Authorization", "Bearer "+API_KEY)
 
+	// Create a message struct
+	message := RequestMessage{
+		Role:    "user",
+		Content: prompt,
+	}
+
 	json_request := OpenAIRequest{
-		Model:       "text-davinci-003",
-		Prompt:      prompt,
-		MaxTokens:   2048,
-		Temperature: 0.5,
+		Model:    "gpt-3.5-turbo",
+		Messages: []RequestMessage{message},
 	}
 
 	// Attach the JSON payload to the request body
@@ -78,7 +105,6 @@ func CallOpenAI(prompt string) (string, error) {
 	}
 
 	req.Body = ioutil.NopCloser(bytes.NewBuffer(json_data))
-
 	// Make the request
 	resp, err := client.Do(req)
 	if err != nil {
@@ -95,15 +121,16 @@ func CallOpenAI(prompt string) (string, error) {
 	}
 
 	// Unmarshal the response body into a struct
-	var response OpenAIResponse
+	var response ResponseBody
 	json.Unmarshal(body, &response)
 
 	// Check if the response is valid
-	if len(response.Choices) == 0 {
+	if len(response.Choices) > 0 {
+		return response.Choices[0].Message.Content, nil
+	} else {
 		log.Fatal("No response from OpenAI")
-		return "", err
+		return "", nil
 	}
-	return response.Choices[0].Text, nil
 }
 
 // ParseAnkiText parses an Anki text and returns a struct with the questions and answers
