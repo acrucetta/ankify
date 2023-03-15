@@ -59,13 +59,15 @@ type AnkiQuestion struct {
 }
 
 const API_URL = "https://api.openai.com/v1/chat/completions"
-const QUESTION_HELPER = `Assume you’re an expert in spaced repetition and learning. You have researched what are the best ways for humans to learn new content. You will help me write Anki cards so that I can learn the content in the text more comprehensively. You will make these cards simple and focused, with clear and concise language, and creating context around each question. I want you to make {card_num} Anki cards for the following text, give it to me in the following format: 
+const QUESTION_HELPER = `Assume you’re an expert learning and memory. You will help me write Anki questions. The Anki questions should be concise and focus on one atomic unit. They should encode ideas from multiple angles, connect and relate ideas, and unambiguously produce a specific answer. Additionally, the questions must make clear what shape of answer is expected and ensure reviewers retrieve answers from memory. Avoid yes-no questions.
+
+I want you to make 5 Anki cards for the following text, give it to me in the following format: 
 
 Q: [Insert question here] 
 A: [Insert answer here] 
 \n\n 
 
-The text is the following, be detailed and include the most unique and helpful points: 
+The text is the following: 
 {text}`
 const SUMMARY_HELPER = `Assume you’re an expert in summarizing text to the most important points of paragraph in a way that retains the original meaning and context of the pragraph, I want you to summarize the following text into less than {summary_size} words with the most unique and helpful points: {text}`
 
