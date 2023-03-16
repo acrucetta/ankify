@@ -61,7 +61,7 @@ type AnkiQuestion struct {
 const API_URL = "https://api.openai.com/v1/chat/completions"
 const QUESTION_HELPER = `Assume you’re an expert learning and memory. You will help me write Anki questions. The Anki questions should be concise and focus on one atomic unit. They should encode ideas from multiple angles, connect and relate ideas, and unambiguously produce a specific answer. Additionally, the questions must make clear what shape of answer is expected and ensure reviewers retrieve answers from memory. Avoid yes-no questions.
 
-I want you to make 5 Anki cards for the following text, give it to me in the following format: 
+I want you to make {card_num} Anki cards for the following text, give it to me in the following format: 
 
 Q: [Insert question here] 
 A: [Insert answer here] 
@@ -228,9 +228,9 @@ func CreateAnkiCards(text string, card_num int) (AnkiQuestions, error) {
 	anki_questions := AnkiQuestions{}
 	anki_token_size := GetTokenSize(text)
 	log.Printf("The summary has %d tokens.", anki_token_size)
-	if anki_token_size > 2048 {
-		log.Printf("The summary is too long, we will use only the first 1800 characters.")
-		text = text[:1800]
+	if anki_token_size > 3000 {
+		log.Printf("The summary is too long, we will use only the first 3000 tokens.")
+		text = text[:(3000 * 4)]
 	}
 	anki_prompt := strings.Replace(QUESTION_HELPER, "{text}", text, 1)
 	anki_prompt = strings.Replace(anki_prompt, "{card_num}", strconv.Itoa(card_num), 1)
@@ -250,7 +250,7 @@ func CreateAnkiCards(text string, card_num int) (AnkiQuestions, error) {
 
 func Ankify(ankiText map[int]string, cardNum int) (AnkiQuestions, error) {
 	ankiQuestions := AnkiQuestions{}
-	const max_tokens int = 2048
+	const max_tokens int = 3000
 	for _, text := range ankiText {
 		// Check the number of tokens in the text
 		// doesn't exceed the maximum number of tokens
