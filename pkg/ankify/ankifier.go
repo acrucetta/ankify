@@ -79,7 +79,7 @@ func CallOpenAI(prompt string) (string, error) {
 	// Create a new request
 	req, err := http.NewRequest("POST", API_URL, nil)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal(err, os.Stderr)
 		return "", err
 	}
 
@@ -102,7 +102,7 @@ func CallOpenAI(prompt string) (string, error) {
 	json_data, err := json.Marshal(json_request)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal(err, os.Stderr)
 		return "", err
 	}
 
@@ -110,7 +110,7 @@ func CallOpenAI(prompt string) (string, error) {
 	// Make the request
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal(err, os.Stderr)
 		return "", err
 	}
 	defer resp.Body.Close()
@@ -118,7 +118,7 @@ func CallOpenAI(prompt string) (string, error) {
 	body, err := ioutil.ReadAll(resp.Body)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal(err, os.Stderr)
 		return "", err
 	}
 
@@ -130,7 +130,7 @@ func CallOpenAI(prompt string) (string, error) {
 	if len(response.Choices) > 0 {
 		return response.Choices[0].Message.Content, nil
 	} else {
-		log.Fatal("No response from OpenAI")
+		log.Fatal("The error response is: ", string(body))
 		return "", nil
 	}
 }
@@ -229,8 +229,10 @@ func CreateAnkiCards(text string, card_num int) (AnkiQuestions, error) {
 	anki_token_size := GetTokenSize(text)
 	log.Printf("The summary has %d tokens.", anki_token_size)
 	if anki_token_size > 2048 {
-		log.Fatal("The summary is too long, we will use only the first 1800 characters.")
-		text = text[:1800]
+		log.Fatal("The summary is too long, we will use only the first 1600 characters.")
+		log.Print("The current length of the summary is", len(text), "characters.")
+		text = text[:1600]
+		log.Print("The new length of the summary is", GetTokenSize(text), "tokens.")
 	}
 	anki_prompt := strings.Replace(QUESTION_HELPER, "{text}", text, 1)
 	anki_prompt = strings.Replace(anki_prompt, "{card_num}", strconv.Itoa(card_num), 1)
@@ -260,14 +262,14 @@ func Ankify(ankiText map[int]string, cardNum int) (AnkiQuestions, error) {
 		var summary_size int = max_tokens / len(requests)
 		summarized_text, err := SummarizeRequests(requests, summary_size)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal(err, os.Stderr)
 			return AnkiQuestions{}, err
 		}
 
 		// Create the anki cards from the summary
 		ankiQuestionsForText, err := CreateAnkiCards(summarized_text, cardNum)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal(err, os.Stderr)
 			return AnkiQuestions{}, err
 		}
 		ankiQuestions.Questions = append(ankiQuestions.Questions, ankiQuestionsForText.Questions...)
