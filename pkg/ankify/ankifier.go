@@ -59,7 +59,16 @@ type AnkiQuestion struct {
 }
 
 const API_URL = "https://api.openai.com/v1/chat/completions"
-const QUESTION_HELPER = `Assume you’re an expert learning and memory. You will help me write Anki questions. The Anki questions should be concise and focus on one atomic unit. They should encode ideas from multiple angles, connect and relate ideas, and unambiguously produce a specific answer. Additionally, the questions must make clear what shape of answer is expected and ensure reviewers retrieve answers from memory. Avoid yes-no questions.
+const QUESTION_HELPER = `You're an AI memorizing assistant. You will help me write Anki questions to retain inforomation in the text through spaced repetition. 
+
+The Anki questions should be:
+- Concise
+- Connect with other questions
+- Include context and background
+- Require critical thinking
+- Unambiguously produce a specific answer
+- Not a yes-no questions
+- Avoid saying "in the text" or "in the passage"
 
 I want you to make {card_num} Anki cards for the following text, give it to me in the following format: 
 
