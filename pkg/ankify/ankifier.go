@@ -267,10 +267,12 @@ func Ankify(ankiText map[int]string, cardNum int) (AnkiQuestions, error) {
 		// the text into multiple requests
 		requests := SplitTextIntoRequests(text, max_tokens)
 		var summary_size int = max_tokens / len(requests)
-		summarized_text, err := SummarizeRequests(requests, summary_size)
-		if err != nil {
-			log.Fatal(err, os.Stderr)
-			return AnkiQuestions{}, err
+		var summarized_text string
+
+		if len(requests) > 1 {
+			summarized_text, _ = SummarizeRequests(requests, summary_size)
+		} else {
+			summarized_text = requests[0]
 		}
 
 		// Create the anki cards from the summary
